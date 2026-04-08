@@ -7,7 +7,7 @@ exports.handler = async (event) => {
   const BOT_TOKEN = "8602701116:AAG2v1a9olDgOw_ytmBTL0SMdELPHADE1Go";
   const GITHUB_TOKEN = "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";
   const REPO_OWNER = "Jinada-shop";
-  const REPO_NAME = "js";
+  const REPO_NAME = "JS";
   const PRODUCTS_FILE_PATH = "products.json";
   
   if (event.httpMethod !== 'POST') {
