@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Личный кабинет — JINADA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: #e8e6e3;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Золотые пылинки */
+        .gold-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .gold-dust-particle {
+            position: absolute;
+            background: radial-gradient(circle, #d4af37, #f5e7b2, rgba(212,175,55,0));
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatGold 8s ease-in-out infinite;
+        }
+        @keyframes floatGold {
+            0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0); }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-20vh) rotate(360deg) scale(1.5); }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            animation: goldPulse 4s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes goldPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-100%); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .logo:hover { transform: scale(1.05); }
+        .jinada-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .back-link {
+            color: #d4af37;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            transform: translateX(-5px);
+            text-shadow: 0 0 8px #d4af37;
+        }
+
+        /* Шапка профиля */
+        .profile-bg {
+            position: relative;
+            height: 200px;
+            border-radius: 32px 32px 0 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            transition: all 0.5s ease;
+        }
+        .profile-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .profile-bg:hover img { transform: scale(1.05); }
+        .bg-edit-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(212,175,55,0.3);
+            color: #d4af37;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            backdrop-filter: blur(4px);
+            z-index: 20;
+            transition: all 0.3s;
+        }
+        .bg-edit-btn:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+            transform: scale(1.05);
+        }
+
+        /* Карточка профиля */
+        .profile-card {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+        }
+
+        /* Шапка профиля с аватаром */
+        .profile-header {
+            display: flex;
+            align-items: flex-end;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 0 2rem 1.5rem 2rem;
+            margin-top: -60px;
+            position: relative;
+            z-index: 15;
+        }
+        .avatar-wrapper {
+            position: relative;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            background: #1a1a1a;
+            transition: all 0.3s;
+        }
+        .profile-avatar:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(212,175,55,0.5); }
+        .avatar-edit-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #d4af37;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .avatar-edit-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #d4af37;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-info h2 {
+            color: #d4af37;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+        .profile-level {
+            display: inline-block;
+            background: linear-gradient(135deg, #d4af37, #b8941a);
+            color: #0a0a0a;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            animation: levelPulse 2s infinite;
+        }
+        @keyframes levelPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .edit-profile-btn {
+            background: none;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .edit-profile-btn:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+            transform: translateY(-2px);
+        }
+
+        /* Форма редактирования */
+        .edit-form {
+            display: none;
+            padding: 1.5rem;
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            background: rgba(10, 10, 10, 0.5);
+            border-radius: 28px;
+            animation: fadeInUp 0.3s ease;
+        }
+        .edit-form.show {
+            display: block;
+        }
+        .edit-form input, .edit-form textarea {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 0.8rem;
+            background: #0a0a0a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            color: #e8e6e3;
+            transition: all 0.3s;
+        }
+        .edit-form input:focus, .edit-form textarea:focus {
+            border-color: #d4af37;
+            outline: none;
+            box-shadow: 0 0 10px rgba(212,175,55,0.3);
+        }
+        .save-profile-btn {
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .save-profile-btn:hover { transform: translateY(-2px); box-shadow: 0 0 15px #d4af37; }
+        .cancel-edit-btn {
+            background: none;
+            border: 1px solid #888;
+            color: #888;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+        .cancel-edit-btn:hover { border-color: #d4af37; color: #d4af37; }
+
+        /* Табы */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .tab-btn:hover {
+            color: #d4af37;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            color: #d4af37;
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #d4af37;
+            box-shadow: 0 0 8px #d4af37;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { width: 0; left: 50%; }
+            to { width: 100%; left: 0; }
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4af37;
+            box-shadow: 0 10px 20px rgba(212,175,55,0.1);
+        }
+        .stat-card h3 {
+            font-size: 1.8rem;
+            color: #d4af37;
+        }
+        .stat-card p {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        /* Прогресс-бар уровня */
+        .level-progress {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .progress-bar {
+            height: 8px;
+            background: rgba(212,175,55,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #f5e7b2);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        .next-level-info {
+            font-size: 0.7rem;
+            color: #888;
+            text-align: center;
+        }
+
+        /* Достижения */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .achievement-card {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212,175,55,0.1);
+        }
+        .achievement-card.achieved {
+            border-color: #d4af37;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            animation: achievedGlow 2s infinite;
+        }
+        @keyframes achievedGlow {
+            0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); }
+            70% { box-shadow: 0 0 0 5px rgba(212,175,55,0); }
+            100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+        }
+        .achievement-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .achievement-card h4 { font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .achievement-card p { font-size: 0.65rem; color: #888; }
+
+        /* Заказы */
+        .order-card {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s;
+        }
+        .order-card:hover {
+            border-color: #d4af37;
+            transform: translateX(5px);
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        .order-id {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .order-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .order-status.pending { background: #ff9800; color: #0a0a0a; }
+        .order-status.paid { background: #4caf50; color: white; }
+        .order-status.confirmed { background: #2196f3; color: white; }
+        .order-status.shipped { background: #9c27b0; color: white; }
+        .order-status.delivered { background: #607d8b; color: white; }
+        .order-status.rejected { background: #f44336; color: white; }
+        .order-date, .order-total { font-size: 0.8rem; margin: 0.3rem 0; }
+        .order-items { font-size: 0.75rem; color: #ccc; margin: 0.5rem 0; }
+        .repeat-order-btn {
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+        .repeat-order-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #d4af37;
+        }
+
+        /* Отзывы */
+        .reviews-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .review-card {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s;
+        }
+        .review-card:hover {
+            border-color: #d4af37;
+            transform: translateX(5px);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        .review-product {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .review-rating {
+            color: #ffc107;
+            font-size: 0.8rem;
+        }
+        .review-text {
+            font-size: 0.8rem;
+            color: #ccc;
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+        .review-date {
+            font-size: 0.65rem;
+            color: #888;
+        }
+        .review-photo {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .review-photo img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid rgba(212,175,55,0.3);
+            transition: all 0.3s;
+        }
+        .review-photo img:hover { transform: scale(1.05); border-color: #d4af37; }
+
+        /* Форма отзыва */
+        .review-form {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .review-form select, .review-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            background: #1a1a1a;
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 16px;
+            color: #e8e6e3;
+            transition: all 0.3s;
+        }
+        .review-form select:focus, .review-form textarea:focus {
+            border-color: #d4af37;
+            outline: none;
+        }
+        .review-form button {
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .review-form button:hover { transform: translateY(-2px); box-shadow: 0 0 15px #d4af37; }
+
+        /* Контакты */
+        .support-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 28px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .support-telegram {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, #2AABEE, #1f93cf);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        .support-telegram:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(42, 171, 238, 0.5);
+        }
+
+        /* Мини-окно социальных сетей */
+        .social-mini-window {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            animation: fadeInUp 0.5s ease;
+        }
+        .social-title {
+            color: #d4af37;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .social-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.3);
+        }
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: rgba(212,175,55,0.2);
+        }
+        .social-icon span:first-child {
+            font-size: 2rem;
+        }
+        .social-name {
+            color: #e8e6e3;
+            font-size: 0.7rem;
+        }
+        .telegram-icon:hover { color: #2AABEE; }
+        .instagram-icon:hover { color: #E4405F; }
+        .tiktok-icon:hover { color: #00f2ea; }
+
+        /* Предложения */
+        .suggestion-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: #0a0a0a;
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 20px;
+            color: #e8e6e3;
+            margin-bottom: 1rem;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+        .suggestion-form textarea:focus {
+            border-color: #d4af37;
+            outline: none;
+        }
+        .suggestion-form button {
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .suggestion-form button:hover { transform: translateY(-2px); box-shadow: 0 0 15px #d4af37; }
+
+        /* Бонусная корзина */
+        .bonus-store {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 28px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .bonus-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .bonus-item {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid rgba(212,175,55,0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+            min-width: 130px;
+        }
+        .bonus-item:hover { transform: translateY(-5px); border-color: #d4af37; }
+        .bonus-item-icon { font-size: 2rem; }
+        .bonus-item-name { font-size: 0.7rem; font-weight: 600; color: #d4af37; margin: 0.3rem 0; }
+        .bonus-item-price { font-size: 0.6rem; color: #888; }
+        .bonus-item-btn {
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            margin-top: 0.3rem;
+        }
+        .bonus-item-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #ff4444;
+            color: #ff8888;
+            padding: 0.6rem;
+            border-radius: 40px;
+            cursor: pointer;
+            width: calc(100% - 3rem);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover {
+            background: rgba(255,68,68,0.2);
+            transform: scale(1.02);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Модальное окно выбора фона */
+        .bg-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .bg-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        .bg-modal-content {
+            background: #1a1a1a;
+            border-radius: 32px;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #d4af37;
+        }
+        .bg-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+            justify-content: center;
+        }
+        .bg-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .bg-option:hover {
+            transform: scale(1.05);
+        }
+        .bg-option.selected {
+            border-color: #d4af37;
+        }
+        .bg-upload {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .bg-upload input {
+            display: none;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+            border-left: 4px solid #d4af37;
+            border-radius: 12px;
+            padding: 12px 20px;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .lightbox.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 16px;
+            border: 2px solid #d4af37;
+            animation: scaleIn 0.3s ease;
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1rem; }
+            .profile-header { flex-direction: column; align-items: center; text-align: center; margin-top: -30px; }
+            .profile-info { text-align: center; }
+            .tabs { justify-content: center; }
+            .tab-btn { padding: 0.5rem 0.8rem; font-size: 0.75rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .achievements-grid { grid-template-columns: 1fr; }
+            .bonus-items { gap: 0.5rem; }
+            .bonus-item { min-width: 110px; }
+            .social-icons { gap: 0.8rem; }
+            .social-icon { padding: 0.3rem 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="gold-dust" id="goldDust"></div>
+<div class="container">
+    <div class="navbar">
+        <div class="logo" onclick="location.href='index.html'">
+            <span class="jinada-gold">JINADA</span>
+        </div>
+        <a href="index.html" class="back-link">← Вернуться в магазин</a>
+    </div>
+
+    <div class="profile-card">
+        <!-- Шапка профиля -->
+        <div class="profile-bg" id="profileBg">
+            <img id="bgImage" src="" alt="Фон профиля">
+            <button class="bg-edit-btn" onclick="openBgModal()">🎨 Сменить фон</button>
+        </div>
+
+        <!-- Аватар и информация -->
+        <div class="profile-header">
+            <div class="avatar-wrapper">
+                <img id="profileAvatar" class="profile-avatar" src="" alt="Аватар">
+                <button class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()">✏️</button>
+                <input type="file" id="avatarInput" style="display:none" accept="image/*" onchange="uploadAvatar(this)">
+            </div>
+            <div class="profile-info">
+                <h2 id="profileName">Загрузка...</h2>
+                <div class="profile-level" id="profileLevel">Загрузка...</div>
+                <p id="profileEmail"></p>
+                <p>📅 На сайте с: <span id="profileSince">-</span></p>
+                <button class="edit-profile-btn" onclick="toggleEditForm()">✏️ Редактировать профиль</button>
+            </div>
+        </div>
+
+        <!-- Форма редактирования -->
+        <div class="edit-form" id="editForm">
+            <input type="text" id="editName" placeholder="Имя">
+            <input type="email" id="editEmail" placeholder="Email">
+            <input type="tel" id="editPhone" placeholder="Телефон">
+            <textarea id="editAddress" rows="2" placeholder="Адрес доставки"></textarea>
+            <button class="save-profile-btn" onclick="saveProfile()">💾 Сохранить изменения</button>
+            <button class="cancel-edit-btn" onclick="toggleEditForm()">Отмена</button>
+        </div>
+
+        <!-- Табы -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="stats">📊 Статистика</button>
+            <button class="tab-btn" data-tab="achievements">🏆 Достижения</button>
+            <button class="tab-btn" data-tab="orders">📦 Мои заказы</button>
+            <button class="tab-btn" data-tab="reviews">⭐ Мои отзывы</button>
+            <button class="tab-btn" data-tab="bonus">🎁 Бонусы</button>
+            <button class="tab-btn" data-tab="support">🆘 Поддержка</button>
+            <button class="tab-btn" data-tab="suggestions">💡 Предложения</button>
+        </div>
+
+        <!-- Статистика -->
+        <div id="tab-stats" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card"><h3 id="totalOrders">0</h3><p>Всего заказов</p></div>
+                <div class="stat-card"><h3 id="totalSpent">0</h3><p>Потрачено (₽)</p></div>
+                <div class="stat-card"><h3 id="profileRating">⭐ 0</h3><p>Рейтинг</p></div>
+                <div class="stat-card"><h3 id="bonusPoints">0</h3><p>Бонусных баллов</p></div>
+            </div>
+            <div class="level-progress" id="levelProgress"></div>
+        </div>
+
+        <!-- Достижения -->
+        <div id="tab-achievements" class="tab-content">
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </div>
+
+        <!-- Мои заказы -->
+        <div id="tab-orders" class="tab-content">
+            <div id="ordersList" class="orders-list"></div>
+        </div>
+
+        <!-- Мои отзывы -->
+        <div id="tab-reviews" class="tab-content">
+            <div id="userReviewsList" class="reviews-list"></div>
+            <div class="review-form">
+                <h4 style="color:#d4af37; margin-bottom:0.5rem;">Оставить новый отзыв</h4>
+                <select id="reviewProductId">
+                    <option value="">Выберите товар</option>
+                </select>
+                <select id="reviewRating">
+                    <option value="5">⭐⭐⭐⭐⭐ 5 звёзд</option>
+                    <option value="4">⭐⭐⭐⭐ 4 звезды</option>
+                    <option value="3">⭐⭐⭐ 3 звезды</option>
+                    <option value="2">⭐⭐ 2 звезды</option>
+                    <option value="1">⭐ 1 звезда</option>
+                </select>
+                <textarea id="reviewText" rows="3" placeholder="Ваш отзыв..."></textarea>
+                <button onclick="submitUserReview()">📝 Оставить отзыв</button>
+                <div id="reviewMessage" style="margin-top:0.5rem; color:#d4af37;"></div>
+            </div>
+        </div>
+
+        <!-- Бонусный магазин -->
+        <div id="tab-bonus" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card"><h3 id="bonusPointsDisplay">0</h3><p>Доступно баллов</p></div>
+            </div>
+            <div class="bonus-store">
+                <h3 style="color:#d4af37;">🎁 Обменяйте бонусы на подарки!</h3>
+                <p style="font-size:0.7rem; color:#888;">💰 Бонусы начисляются ТОЛЬКО после подтверждения оплаты администратором (статус "Оплачен") — 2% от суммы заказа | 1 балл = 1 рубль скидки</p>
+                <div class="bonus-items" id="bonusItems"></div>
+            </div>
+        </div>
+
+        <!-- Поддержка -->
+        <div id="tab-support" class="tab-content">
+            <!-- Мини-окно социальных сетей -->
+            <div class="social-mini-window">
+                <div class="social-title">
+                    <span>📱</span> Мы в социальных сетях <span>✨</span>
+                </div>
+                <div class="social-icons">
+                    <a href="https://t.me/jinadamagaz_bot" target="_blank" class="social-icon">
+                        <span class="telegram-icon">📱</span>
+                        <span class="social-name">Telegram</span>
+                    </a>
+                    <a href="https://instagram.com/jinada.official" target="_blank" class="social-icon">
+                        <span class="instagram-icon">📸</span>
+                        <span class="social-name">Instagram</span>
+                    </a>
+                    <a href="https://tiktok.com/@jinada.official" target="_blank" class="social-icon">
+                        <span class="tiktok-icon">🎵</span>
+                        <span class="social-name">TikTok</span>
+                    </a>
+                </div>
+                <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Подписывайтесь — будьте в курсе акций и новинок!</p>
+            </div>
+            
+            <div class="support-card">
+                <div style="font-size: 3rem;">🆘</div>
+                <h3 style="color: #d4af37; margin: 0.5rem 0;">Служба поддержки Jinada</h3>
+                <p>Напишите нам в Telegram — ответим в течение 15 минут</p>
+                <a href="https://t.me/jinadamagaz_bot" target="_blank" class="support-telegram">
+                    📱 Написать в Telegram
+                </a>
+                <p style="margin-top: 1rem; color: #888;">Время работы: 10:00 - 20:00 (ежедневно)</p>
+            </div>
+        </div>
+
+        <!-- Предложения -->
+        <div id="tab-suggestions" class="tab-content">
+            <div class="suggestion-form">
+                <h3 style="color: #d4af37; margin-bottom: 0.5rem;">💡 Ваши идеи и пожелания</h3>
+                <p style="color: #888; margin-bottom: 0.5rem;">Помогите нам стать лучше!</p>
+                <textarea id="suggestionText" rows="4" placeholder="Напишите ваше предложение..."></textarea>
+                <button onclick="sendSuggestion()">📨 Отправить предложение</button>
+                <div id="suggestionMessage" style="margin-top: 0.5rem; color: #d4af37;"></div>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">🚪 Выйти из аккаунта</button>
+    </div>
+
+    <footer>
+        © 2024-2025 JINADA. Все права защищены.<br>
+        ИП Храмцов Александр Владимирович
+    </footer>
+</div>
+
+<!-- Модальное окно выбора фона -->
+<div id="bgModal" class="bg-modal">
+    <div class="bg-modal-content">
+        <h3 style="color: #d4af37;">🎨 Выберите фон профиля</h3>
+        <div class="bg-options">
+            <div class="bg-option" style="background: linear-gradient(135deg, #1a1a2e, #16213e);" onclick="changeBg('linear-gradient(135deg, #1a1a2e, #16213e)')"></div>
+            <div class="bg-option" style="background: linear-gradient(135deg, #2d1b2e, #1a0f2e);" onclick="changeBg('linear-gradient(135deg, #2d1b2e, #1a0f2e)')"></div>
+            <div class="bg-option" style="background: linear-gradient(135deg, #0f2b2d, #0a1a1a);" onclick="changeBg('linear-gradient(135deg, #0f2b2d, #0a1a1a)')"></div>
+            <div class="bg-option" style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a);" onclick="changeBg('linear-gradient(135deg, #1a1a1a, #2a2a2a)')"></div>
+            <div class="bg-option" style="background: radial-gradient(circle at 20% 50%, #d4af37, #0a0a0a);" onclick="changeBg('radial-gradient(circle at 20% 50%, #d4af37, #0a0a0a)')"></div>
+            <div class="bg-option" style="background: linear-gradient(135deg, #d4af37, #8B6914);" onclick="changeBg('linear-gradient(135deg, #d4af37, #8B6914)')"></div>
+        </div>
+        <div class="bg-upload">
+            <label style="background:#d4af37; color:#0a0a0a; padding:0.5rem 1rem; border-radius:40px; cursor:pointer; display:inline-block;">📤 Загрузить своё фото</label>
+            <input type="file" id="bgUploadInput" accept="image/*" onchange="uploadBgImage(this)">
+        </div>
+        <button onclick="closeBgModal()" style="background: #d4af37; color: #0a0a0a; border: none; padding: 0.5rem 1rem; border-radius: 40px; cursor: pointer; margin-top: 1rem; width: 100%;">Закрыть</button>
+    </div>
+</div>
+
+<!-- Лайтбокс для фото -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="">
+</div>
+
+<script>
+    // ========== ДАННЫЕ ==========
+    let currentUser = null;
+    let allProducts = [];
+    let orders = [];
+    let reviews = [];
+    let allReviews = [];
+
+    // БОНУСНЫЕ ТОВАРЫ
+    const bonusItems = [
+        { id: 1, name: "Промокод 300₽", icon: "🎫", price: 300, description: "Скидка 300₽ на следующий заказ" },
+        { id: 2, name: "Промокод 500₽", icon: "🎟️", price: 500, description: "Скидка 500₽ на следующий заказ" },
+        { id: 3, name: "Фирменный шоппер", icon: "🛍️", price: 1000, description: "Экосумка JINADA с золотым тиснением" },
+        { id: 4, name: "Скидка 10%", icon: "💎", price: 2000, description: "Персональная скидка 10% на весь ассортимент" },
+        { id: 5, name: "Именной сертификат", icon: "📜", price: 5000, description: "Именной золотой сертификат JINADA + подарок" },
+        { id: 6, name: "Промокод 1000₽", icon: "💳", price: 1000, description: "Скидка 1000₽ при заказе от 5000₽" }
+    ];
+
+    // Функция показа уведомлений
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerHTML = `✨ ${message}`;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    // Создание золотых пылинок
+    function createGoldDust() {
+        const container = document.getElementById('goldDust');
+        for (let i = 0; i < 40; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'gold-dust-particle';
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = Math.random() * 5 + 6 + 's';
+            container.appendChild(particle);
+        }
+    }
+
+    // ========== ФУНКЦИЯ ДЛЯ НАЧИСЛЕНИЯ БОНУСОВ ТОЛЬКО ЗА ОПЛАЧЕННЫЕ ЗАКАЗЫ ==========
+    function updateBonusFromPaidOrders() {
+        const userOrders = orders.filter(o => o.phone === currentUser.phone || o.email === currentUser.email);
+        // Оплаченные заказы (статус paid, confirmed, shipped, delivered)
+        const paidOrders = userOrders.filter(o => o.status === 'paid' || o.status === 'confirmed' || o.status === 'shipped' || o.status === 'delivered');
+        
+        // Получаем уже начисленные бонусы за заказы
+        let awardedOrderIds = JSON.parse(localStorage.getItem(`bonus_awarded_${currentUser.id}`) || '[]');
+        let currentBonus = parseInt(localStorage.getItem(`bonus_${currentUser.id}`) || '0');
+        let newBonusTotal = 0;
+        let newlyAwardedIds = [];
+        
+        paidOrders.forEach(order => {
+            // Если бонус за этот заказ ещё не начислен
+            if (!awardedOrderIds.includes(order.id) && order.total) {
+                const orderBonus = Math.floor(order.total * 0.02); // 2% от суммы заказа
+                newBonusTotal += orderBonus;
+                newlyAwardedIds.push(order.id);
+                showNotification(`🎉 За заказ ${order.id} начислено ${orderBonus} бонусов! (2% от суммы)`);
+            }
+        });
+        
+        if (newBonusTotal > 0) {
+            const newBonus = currentBonus + newBonusTotal;
+            localStorage.setItem(`bonus_${currentUser.id}`, newBonus);
+            localStorage.setItem(`bonus_awarded_${currentUser.id}`, JSON.stringify([...awardedOrderIds, ...newlyAwardedIds]));
+            showNotification(`✨ Итого начислено ${newBonusTotal} бонусов!`);
+        }
+        
+        return parseInt(localStorage.getItem(`bonus_${currentUser.id}`) || '0');
+    }
+
+    // ========== ЗАГРУЗКА ДАННЫХ ==========
+    function loadUser() {
+        const saved = localStorage.getItem("jinada_user");
+        if (!saved || saved === "null" || saved === "undefined") {
+            window.location.href = "login.html";
+            return;
+        }
+        try {
+            currentUser = JSON.parse(saved);
+        } catch(e) {
+            window.location.href = "login.html";
+            return;
+        }
+        
+        loadProducts();
+        loadOrders();
+        loadReviews();
+        loadUserSettings();
+        updateUI();
+    }
+
+    function loadProducts() {
+        const saved = localStorage.getItem("jinada_products");
+        if (saved) allProducts = JSON.parse(saved);
+        else allProducts = [];
+    }
+
+    function loadOrders() {
+        const saved = localStorage.getItem("jinada_orders");
+        if (saved) orders = JSON.parse(saved);
+        else orders = [];
+    }
+
+    function loadReviews() {
+        const saved = localStorage.getItem("jinada_reviews");
+        if (saved) allReviews = JSON.parse(saved);
+        else allReviews = [];
+    }
+
+    function loadUserSettings() {
+        const savedBg = localStorage.getItem("jinada_profile_bg_" + currentUser.id);
+        if (savedBg) {
+            const bgElement = document.getElementById('profileBg');
+            if (savedBg.startsWith('url') || savedBg.startsWith('linear-gradient') || savedBg.startsWith('radial-gradient')) {
+                bgElement.style.background = savedBg;
+                const bgImage = bgElement.querySelector('#bgImage');
+                if (bgImage) bgImage.style.display = 'none';
+            } else {
+                const bgImage = document.getElementById('bgImage');
+                if (bgImage) {
+                    bgImage.src = savedBg;
+                    bgImage.style.display = 'block';
+                    bgElement.style.background = 'none';
+                }
+            }
+        }
+        
+        const savedProfile = localStorage.getItem("jinada_profile_" + currentUser.id);
+        if (savedProfile) {
+            const profile = JSON.parse(savedProfile);
+            if (profile.name) currentUser.name = profile.name;
+            if (profile.email) currentUser.email = profile.email;
+            if (profile.phone) currentUser.phone = profile.phone;
+            if (profile.address) currentUser.address = profile.address;
+            if (profile.avatar) currentUser.picture = profile.avatar;
+        }
+    }
+
+    function updateUI() {
+        document.getElementById("profileName").innerText = currentUser.name;
+        document.getElementById("profileEmail").innerHTML = `📧 ${currentUser.email || "не указан"}`;
+        document.getElementById("profileSince").innerText = currentUser.subscribeDate ? new Date(currentUser.subscribeDate).toLocaleDateString() : "неизвестно";
+        
+        document.getElementById("editName").value = currentUser.name || "";
+        document.getElementById("editEmail").value = currentUser.email || "";
+        document.getElementById("editPhone").value = currentUser.phone || "";
+        document.getElementById("editAddress").value = currentUser.address || "";
+        
+        const avatar = document.getElementById("profileAvatar");
+        avatar.src = currentUser.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=d4af37&color=0a0a0a&bold=true`;
+        
+        const userOrders = orders.filter(o => o.phone === currentUser.phone || o.email === currentUser.email);
+        const totalSpent = userOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+        document.getElementById("totalOrders").innerText = userOrders.length;
+        document.getElementById("totalSpent").innerText = totalSpent.toLocaleString();
+        
+        // Рейтинг на основе отзывов
+        const userReviews = allReviews.filter(r => r.userId === currentUser.id);
+        const avgRating = userReviews.length > 0 ? (userReviews.reduce((sum, r) => sum + r.rating, 0) / userReviews.length).toFixed(1) : 0;
+        document.getElementById("profileRating").innerHTML = `⭐ ${avgRating}`;
+        
+        // НАЧИСЛЕНИЕ БОНУСОВ ТОЛЬКО ЗА ОПЛАЧЕННЫЕ ЗАКАЗЫ
+        const bonusPoints = updateBonusFromPaidOrders();
+        
+        document.getElementById("bonusPoints").innerText = bonusPoints;
+        document.getElementById("bonusPointsDisplay").innerText = bonusPoints;
+        
+        const level = getUserLevel(totalSpent);
+        document.getElementById("profileLevel").innerHTML = `${level.icon} ${level.name}`;
+        
+        updateLevelProgress(totalSpent);
+        renderAchievements(userOrders.length, totalSpent);
+        renderOrders(userOrders);
+        renderUserReviews();
+        updateProductSelect();
+        renderBonusItems(bonusPoints);
+    }
+
+    function getUserLevel(totalSpent) {
+        if (totalSpent >= 100000) return { name: "Jinada Legend", icon: "👑", color: "#ff6b6b", nextLevel: 0 };
+        if (totalSpent >= 50000) return { name: "Jinada Platinum", icon: "💎", color: "#00bcd4", nextLevel: 100000 };
+        if (totalSpent >= 20000) return { name: "Jinada Gold", icon: "🥇", color: "#d4af37", nextLevel: 50000 };
+        if (totalSpent >= 5000) return { name: "Jinada Silver", icon: "🥈", color: "#c0c0c0", nextLevel: 20000 };
+        return { name: "Jinada Starter", icon: "🟤", color: "#8B4513", nextLevel: 5000 };
+    }
+
+    function updateLevelProgress(totalSpent) {
+        const currentLevel = getUserLevel(totalSpent);
+        const container = document.getElementById("levelProgress");
+        if (currentLevel.nextLevel === 0) {
+            container.innerHTML = `<div class="level-progress"><div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div><div class="next-level-info">✨ Максимальный уровень достигнут! ✨</div></div>`;
+        } else {
+            const percent = Math.min(100, Math.floor((totalSpent / currentLevel.nextLevel) * 100));
+            const remaining = currentLevel.nextLevel - totalSpent;
+            container.innerHTML = `<div class="level-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;"></div></div>
+                <div class="next-level-info">⭐ До следующего уровня осталось потратить ${remaining.toLocaleString()} ₽ ⭐</div>
+            </div>`;
+        }
+    }
+
+    function renderAchievements(ordersCount, totalSpent) {
+        const userReviews = allReviews.filter(r => r.userId === currentUser.id);
+        const bonusPoints = parseInt(localStorage.getItem(`bonus_${currentUser.id}`) || '0');
+        const achievements = [
+            { id: 1, name: "Первый заказ", desc: "Сделайте первый заказ", icon: "🎁", condition: ordersCount >= 1 },
+            { id: 2, name: "Постоянный клиент", desc: "Сделайте 5 заказов", icon: "🔄", condition: ordersCount >= 5 },
+            { id: 3, name: "VIP клиент", desc: "Сделайте 10 заказов", icon: "💎", condition: ordersCount >= 10 },
+            { id: 4, name: "Серебряный статус", desc: "Потратьте 5000 ₽", icon: "🥈", condition: totalSpent >= 5000 },
+            { id: 5, name: "Золотой статус", desc: "Потратьте 20000 ₽", icon: "🥇", condition: totalSpent >= 20000 },
+            { id: 6, name: "Платиновый статус", desc: "Потратьте 50000 ₽", icon: "💎", condition: totalSpent >= 50000 },
+            { id: 7, name: "Легенда Jinada", desc: "Потратьте 100000 ₽", icon: "👑", condition: totalSpent >= 100000 },
+            { id: 8, name: "Активный покупатель", desc: "Сделайте 3 заказа за месяц", icon: "⚡", condition: ordersCount >= 3 },
+            { id: 9, name: "Знаток стиля", desc: "Оставьте 5 отзывов", icon: "✍️", condition: userReviews.length >= 5 },
+            { id: 10, name: "Эксперт", desc: "Напишите предложение", icon: "💡", condition: localStorage.getItem(`suggestion_${currentUser.id}`) === 'true' },
+            { id: 11, name: "Коллекционер бонусов", desc: "Накопите 5000 бонусов", icon: "💰", condition: bonusPoints >= 5000 }
+        ];
+        
+        const container = document.getElementById("achievementsGrid");
+        container.innerHTML = achievements.map(a => `
+            <div class="achievement-card ${a.condition ? 'achieved' : ''}">
+                <div class="achievement-icon">${a.icon}</div>
+                <h4>${a.name}</h4>
+                <p>${a.desc}</p>
+                ${a.condition ? '<span style="color:#4caf50;">✓ Получено</span>' : '<span style="color:#888;">🔒 Недоступно</span>'}
+            </div>
+        `).join("");
+    }
+
+    function renderOrders(userOrders) {
+        const container = document.getElementById("ordersList");
+        if (userOrders.length === 0) {
+            container.innerHTML = "<p style='color:#888; text-align:center; padding:2rem;'>У вас пока нет заказов</p>";
+            return;
+        }
+        
+        container.innerHTML = userOrders.slice().reverse().map(order => {
+            const statusClass = getStatusClass(order.status);
+            const statusText = getStatusText(order.status);
+            return `
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-id">📦 ${order.id}</span>
+                        <span class="order-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="order-date">📅 ${new Date(order.date).toLocaleDateString()}</div>
+                    <div class="order-total">💰 ${order.total} ₽</div>
+                    <div class="order-items">
+                        <strong>Товары:</strong><br>
+                        ${order.items?.map(i => `${i.name} (${i.color}, ${i.size}) x${i.quantity}`).join(', ') || ''}
+                    </div>
+                    <button class="repeat-order-btn" onclick="repeatOrder('${order.id}')">🔄 Повторить заказ</button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function repeatOrder(orderId) {
+        const order = orders.find(o => o.id === orderId);
+        if (order && order.items) {
+            order.items.forEach(item => {
+                for (let i = 0; i < item.quantity; i++) {
+                    let cart = JSON.parse(localStorage.getItem("jinada_cart") || "[]");
+                    cart.push({ 
+                        id: item.id, 
+                        name: item.name, 
+                        price: item.price, 
+                        size: item.size, 
+                        color: item.color, 
+                        quantity: 1 
+                    });
+                    localStorage.setItem("jinada_cart", JSON.stringify(cart));
+                }
+            });
+            showNotification("✅ Товары добавлены в корзину!");
+            window.location.href = "index.html";
+        }
+    }
+
+    function getStatusClass(status) {
+        const classes = {
+            'pending': 'pending', 'paid': 'paid', 'confirmed': 'confirmed',
+            'shipped': 'shipped', 'delivered': 'delivered', 'rejected': 'rejected'
+        };
+        return classes[status] || 'pending';
+    }
+
+    function getStatusText(status) {
+        const texts = {
+            'pending': '⏳ Ожидает оплаты', 'paid': '💳 Оплачен', 'confirmed': '✅ Подтверждён',
+            'shipped': '📦 Отправлен', 'delivered': '🚚 Доставлен', 'rejected': '❌ Отклонён'
+        };
+        return texts[status] || '⏳ В обработке';
+    }
+
+    function renderUserReviews() {
+        const userReviews = allReviews.filter(r => r.userId === currentUser.id || r.userName === currentUser.name);
+        const container = document.getElementById("userReviewsList");
+        
+        if (userReviews.length === 0) {
+            container.innerHTML = "<p style='color:#888; text-align:center; padding:2rem;'>У вас пока нет отзывов</p>";
+            return;
+        }
+        
+        container.innerHTML = userReviews.slice().reverse().map(review => {
+            const product = allProducts.find(p => p.id === review.productId);
+            const productName = product ? product.name : "Товар";
+            return `
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-product">📦 ${productName}</span>
+                        <span class="review-rating">${'⭐'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
+                    </div>
+                    <div class="review-text">${escapeHtml(review.text)}</div>
+                    ${review.photos && review.photos.length > 0 ? `<div class="review-photo">${review.photos.map(p => `<img src="${p}" onclick="openLightbox('${p}')">`).join('')}</div>` : ''}
+                    <div class="review-date">📅 ${review.date}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateProductSelect() {
+        const select = document.getElementById("reviewProductId");
+        if (!select) return;
+        
+        const purchasedProductIds = [];
+        const userOrders = orders.filter(o => o.phone === currentUser.phone || o.email === currentUser.email);
+        userOrders.forEach(order => {
+            if (order.items) {
+                order.items.forEach(item => {
+                    if (!purchasedProductIds.includes(item.id)) {
+                        purchasedProductIds.push(item.id);
+                    }
+                });
+            }
+        });
+        
+        const purchasedProducts = allProducts.filter(p => purchasedProductIds.includes(p.id));
+        
+        select.innerHTML = '<option value="">Выберите товар</option>';
+        purchasedProducts.forEach(product => {
+            const alreadyReviewed = allReviews.some(r => r.userId === currentUser.id && r.productId === product.id);
+            if (!alreadyReviewed) {
+                select.innerHTML += `<option value="${product.id}">${product.name}</option>`;
+            }
+        });
+    }
+
+    function submitUserReview() {
+        const productId = parseInt(document.getElementById("reviewProductId").value);
+        const rating = parseInt(document.getElementById("reviewRating").value);
+        const text = document.getElementById("reviewText").value.trim();
+        const msgDiv = document.getElementById("reviewMessage");
+        
+        if (!productId) { msgDiv.innerHTML = "❌ Выберите товар"; return; }
+        if (!text) { msgDiv.innerHTML = "❌ Напишите отзыв"; return; }
+        
+        const userOrders = orders.filter(o => o.phone === currentUser.phone || o.email === currentUser.email);
+        let hasPurchased = false;
+        for (const order of userOrders) {
+            if (order.items && order.items.some(item => item.id === productId)) {
+                hasPurchased = true;
+                break;
+            }
+        }
+        
+        if (!hasPurchased) {
+            msgDiv.innerHTML = "❌ Вы можете оставить отзыв только на купленные товары";
+            return;
+        }
+        
+        const existingReview = allReviews.find(r => r.userId === currentUser.id && r.productId === productId);
+        if (existingReview) {
+            msgDiv.innerHTML = "❌ Вы уже оставляли отзыв на этот товар";
+            return;
+        }
+        
+        const newReview = {
+            id: Date.now(),
+            productId: productId,
+            userId: currentUser.id,
+            userName: currentUser.name,
+            rating: rating,
+            text: text,
+            date: new Date().toLocaleDateString(),
+            photos: []
+        };
+        
+        allReviews.push(newReview);
+        localStorage.setItem("jinada_reviews", JSON.stringify(allReviews));
+        
+        document.getElementById("reviewText").value = "";
+        document.getElementById("reviewProductId").value = "";
+        msgDiv.innerHTML = "✅ Спасибо за отзыв!";
+        setTimeout(() => msgDiv.innerHTML = "", 3000);
+        
+        renderUserReviews();
+        updateProductSelect();
+        updateUI();
+        showNotification("⭐ Спасибо за отзыв! +5 бонусов");
+        
+        // Начисляем бонус за отзыв (не зависит от оплаты заказа)
+        let bonusPoints = parseInt(localStorage.getItem(`bonus_${currentUser.id}`) || '0');
+        bonusPoints += 5;
+        localStorage.setItem(`bonus_${currentUser.id}`, bonusPoints);
+        updateUI();
+    }
+
+    function renderBonusItems(bonusPoints) {
+        const container = document.getElementById("bonusItems");
+        container.innerHTML = bonusItems.map(item => `
+            <div class="bonus-item">
+                <div class="bonus-item-icon">${item.icon}</div>
+                <div class="bonus-item-name">${item.name}</div>
+                <div class="bonus-item-price">${item.price} баллов</div>
+                <button class="bonus-item-btn" onclick="exchangeBonus(${item.id}, ${item.price})" ${bonusPoints < item.price ? 'disabled style="opacity:0.5;"' : ''}>Обменять</button>
+            </div>
+        `).join('');
+    }
+
+    function exchangeBonus(itemId, price) {
+        let bonusPoints = parseInt(localStorage.getItem(`bonus_${currentUser.id}`) || '0');
+        if (bonusPoints < price) {
+            showNotification("❌ Недостаточно баллов!");
+            return;
+        }
+        
+        const item = bonusItems.find(i => i.id === itemId);
+        
+        // СПИСЫВАЕМ БОНУСЫ
+        bonusPoints -= price;
+        localStorage.setItem(`bonus_${currentUser.id}`, bonusPoints);
+        
+        let promocodes = JSON.parse(localStorage.getItem("jinada_promocodes") || "[]");
+        
+        if (itemId === 1) {
+            promocodes.push({ code: `BONUS300_${Date.now().toString().slice(-6)}`, discount: 300, percent: 0, userId: currentUser.id, used: false, minOrder: 0 });
+        } else if (itemId === 2) {
+            promocodes.push({ code: `BONUS500_${Date.now().toString().slice(-6)}`, discount: 500, percent: 0, userId: currentUser.id, used: false, minOrder: 0 });
+        } else if (itemId === 4) {
+            promocodes.push({ code: `BONUS10_${Date.now().toString().slice(-6)}`, discount: 0, percent: 10, userId: currentUser.id, used: false, minOrder: 0 });
+        } else if (itemId === 6) {
+            promocodes.push({ code: `BONUS1000_${Date.now().toString().slice(-6)}`, discount: 1000, percent: 0, userId: currentUser.id, used: false, minOrder: 5000 });
+        } else if (itemId === 3) {
+            showNotification("🎁 Поздравляем! Фирменный шоппер будет добавлен к вашему следующему заказу!");
+            localStorage.setItem(`gift_shopper_${currentUser.id}`, 'true');
+        } else if (itemId === 5) {
+            showNotification("📜 Именной сертификат будет отправлен на указанную почту!");
+            localStorage.setItem(`certificate_${currentUser.id}`, 'true');
+        }
+        
+        localStorage.setItem("jinada_promocodes", JSON.stringify(promocodes));
+        showNotification(`🎁 Вы получили: ${item.name}! Бонусы списаны: ${price}`);
+        updateUI();
+    }
+
+    // ========== РЕДАКТИРОВАНИЕ ПРОФИЛЯ ==========
+    function toggleEditForm() {
+        const form = document.getElementById("editForm");
+        form.classList.toggle("show");
+    }
+
+    function saveProfile() {
+        currentUser.name = document.getElementById("editName").value;
+        currentUser.email = document.getElementById("editEmail").value;
+        currentUser.phone = document.getElementById("editPhone").value;
+        currentUser.address = document.getElementById("editAddress").value;
+        
+        localStorage.setItem("jinada_user", JSON.stringify(currentUser));
+        
+        const profileData = {
+            name: currentUser.name,
+            email: currentUser.email,
+            phone: currentUser.phone,
+            address: currentUser.address,
+            avatar: currentUser.picture
+        };
+        localStorage.setItem("jinada_profile_" + currentUser.id, JSON.stringify(profileData));
+        
+        updateUI();
+        toggleEditForm();
+        showNotification("✅ Профиль обновлён!");
+    }
+
+    // ========== АВАТАР ==========
+    function uploadAvatar(input) {
+        const file = input.files[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Файл больше 2MB");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentUser.picture = e.target.result;
+                localStorage.setItem("jinada_user", JSON.stringify(currentUser));
+                document.getElementById("profileAvatar").src = e.target.result;
+                
+                const profileData = JSON.parse(localStorage.getItem("jinada_profile_" + currentUser.id) || '{}');
+                profileData.avatar = e.target.result;
+                localStorage.setItem("jinada_profile_" + currentUser.id, JSON.stringify(profileData));
+                showNotification("✅ Аватар обновлён!");
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // ========== ФОН ПРОФИЛЯ ==========
+    function openBgModal() { document.getElementById("bgModal").classList.add("show"); }
+    function closeBgModal() { document.getElementById("bgModal").classList.remove("show"); }
+    
+    function changeBg(bgStyle) {
+        const bgElement = document.getElementById('profileBg');
+        const bgImage = document.getElementById('bgImage');
+        bgElement.style.background = bgStyle;
+        if (bgImage) bgImage.style.display = 'none';
+        localStorage.setItem("jinada_profile_bg_" + currentUser.id, bgStyle);
+        closeBgModal();
+        showNotification("🎨 Фон обновлён!");
+    }
+    
+    function uploadBgImage(input) {
+        const file = input.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Файл больше 5MB");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const bgElement = document.getElementById('profileBg');
+                const bgImage = document.getElementById('bgImage');
+                bgImage.src = e.target.result;
+                bgImage.style.display = 'block';
+                bgElement.style.background = 'none';
+                localStorage.setItem("jinada_profile_bg_" + currentUser.id, e.target.result);
+                closeBgModal();
+                showNotification("🎨 Фон обновлён!");
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // ========== ПРЕДЛОЖЕНИЯ ==========
+    function sendSuggestion() {
+        const text = document.getElementById("suggestionText").value.trim();
+        if (!text) {
+            document.getElementById("suggestionMessage").innerHTML = "❌ Введите текст предложения";
+            return;
+        }
+        
+        let suggestions = JSON.parse(localStorage.getItem("jinada_suggestions") || "[]");
+        suggestions.push({
+            id: Date.now(),
+            userId: currentUser.id,
+            userName: currentUser.name,
+            text: text,
+            date: new Date().toISOString(),
+            status: "new"
+        });
+        localStorage.setItem("jinada_suggestions", JSON.stringify(suggestions));
+        localStorage.setItem(`suggestion_${currentUser.id}`, 'true');
+        
+        document.getElementById("suggestionText").value = "";
+        document.getElementById("suggestionMessage").innerHTML = "✅ Спасибо! Ваше предложение отправлено.";
+        setTimeout(() => document.getElementById("suggestionMessage").innerHTML = "", 3000);
+        showNotification("💡 Спасибо за предложение! +50 бонусов");
+        
+        // Начисляем бонус за предложение
+        let bonusPoints = parseInt(localStorage.getItem(`bonus_${currentUser.id}`) || '0');
+        bonusPoints += 50;
+        localStorage.setItem(`bonus_${currentUser.id}`, bonusPoints);
+        updateUI();
+    }
+
+    // ========== ВЫХОД ==========
+    function logout() {
+        localStorage.removeItem("jinada_user");
+        window.location.href = "index.html";
+    }
+
+    // ========== ЛАЙТБОКС ==========
+    function openLightbox(imgSrc) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        lightboxImg.src = imgSrc;
+        lightbox.classList.add('show');
+    }
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); }
+
+    // ========== ТАБЫ ==========
+    function setupTabs() {
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                tabs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
+        });
+    }
+
+    function escapeHtml(text) {
+        if (!text) return "";
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    createGoldDust();
+    loadUser();
+    setupTabs();
+    
+    // Обновление бонусов каждые 5 секунд (проверка новых оплаченных заказов)
+    setInterval(() => {
+        if (currentUser) {
+            loadOrders();
+            updateBonusFromPaidOrders();
+            updateUI();
+        }
+    }, 5000);
+</script>
+</body>
+</html>

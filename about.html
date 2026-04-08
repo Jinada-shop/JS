@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>О магазине — JINADA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: #e8e6e3;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            animation: goldPulse 4s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes goldPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 10% 20%, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 25% 45%, #f5e7b2, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40% 60%, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 55% 30%, #c9a062, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 70% 75%, #f5e7b2, rgba(0,0,0,0));
+            background-repeat: no-repeat;
+            opacity: 0.4;
+            animation: sparkleFloat 8s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes sparkleFloat {
+            0% { opacity: 0.2; transform: translateY(0px); }
+            50% { opacity: 0.6; transform: translateY(-10px); }
+            100% { opacity: 0.2; transform: translateY(0px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .jinada-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .back-link {
+            color: #d4af37;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .about-card {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .crown {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: crownFloat 3s ease-in-out infinite;
+        }
+        @keyframes crownFloat {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(-5deg); }
+        }
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        .header p {
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+        .section h2 {
+            color: #d4af37;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 3px solid #d4af37;
+            padding-left: 1rem;
+        }
+        .section p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Стиль для цитаты */
+        .quote {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border-left: 3px solid #d4af37;
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin: 1rem 0;
+            font-style: italic;
+            color: #e8e6e3;
+        }
+
+        /* Партнерская карточка */
+        .partner-highlight {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(0, 0, 0, 0.5));
+            border-radius: 32px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            text-align: center;
+        }
+        .partner-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .partner-name {
+            font-size: 1.2rem;
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .partner-desc {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        /* Контакты */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .contact-card {
+            background: rgba(10, 10, 10, 0.7);
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s;
+        }
+        .contact-card:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+        }
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .contact-card h3 {
+            color: #d4af37;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .contact-card a {
+            color: #e8e6e3;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .contact-card a:hover {
+            color: #d4af37;
+        }
+
+        /* Преимущества */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .feature-card {
+            background: rgba(10, 10, 10, 0.7);
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-card h4 {
+            color: #d4af37;
+            margin-bottom: 0.3rem;
+        }
+        .feature-card p {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* Карта */
+        .map {
+            background: #0a0a0a;
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .map-placeholder {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            color: #888;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #0a0a0a;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: #f5e7b2;
+            transform: translateY(-2px);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #d4af37;
+            color: #0a0a0a;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1rem; }
+            .about-card { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo" onclick="location.href='index.html'">
+                <span class="jinada-gold">JINADA</span>
+            </div>
+            <a href="index.html" class="back-link">← Вернуться в магазин</a>
+        </div>
+
+        <div class="about-card">
+            <div class="header">
+                <div class="crown">👑</div>
+                <h1>О магазине JINADA</h1>
+                <p>уличная одежда с душой</p>
+            </div>
+
+            <!-- О нас -->
+            <div class="section">
+                <h2>📖 Наша история</h2>
+                <p><strong>JINADA</strong> родилась из любви к уличной культуре, свободе самовыражения и качественной одежде. Мы заметили, что настоящий стиль — это не просто дорогие бренды, а умение сочетать комфорт, индивидуальность и актуальные тренды.</p>
+                <p>Так появился JINADA — бренд для тех, кто живёт в ритме большого города, ценит качество и не боится выделяться. Каждая наша вещь — это результат долгой работы над кроем, выбором тканей и деталями, которые делают одежду особенной.</p>
+                <div class="quote">
+                    «Мы создаём одежду, в которую хочется влюбиться с первого взгляда и носить годами. Потому что настоящий стиль не имеет срока годности.»
+                </div>
+            </div>
+
+            <!-- Сотрудничество с фабрикой -->
+            <div class="section">
+                <h2>🤝 Наше производство</h2>
+                <p>Мы гордимся сотрудничеством с ведущим производителем одежды в Китае — <strong>Dongguan Jinchen Yige Clothing Co.</strong></p>
+                <div class="partner-highlight">
+                    <div class="partner-icon">🏭</div>
+                    <div class="partner-name">Dongguan Jinchen Yige Clothing Co.</div>
+                    <div class="partner-desc">Наш надёжный партнёр с 2018 года</div>
+                </div>
+                <p>Эта фабрика специализируется на производстве качественной уличной одежды с использованием современных технологий и экологичных материалов. Благодаря нашему партнёрству мы можем предлагать вам:</p>
+                <ul style="margin-left: 1.5rem; color: #ccc; line-height: 1.6;">
+                    <li>✨ Высокое качество пошива — каждый шов проверяется вручную</li>
+                    <li>🌱 Сертифицированные ткани — безопасные для кожи и окружающей среды</li>
+                    <li>🎨 Уникальный дизайн — мы лично разрабатываем каждую модель</li>
+                    <li>📦 Быструю доставку — напрямую с производства</li>
+                </ul>
+                <p>Мы лично посещаем производство несколько раз в год, контролируем каждый этап создания одежды — от разработки лекал до финальной упаковки. Только так мы можем гарантировать, что каждая вещь с логотипом JINADA будет радовать вас долгие годы.</p>
+            </div>
+
+            <!-- Философия бренда -->
+            <div class="section">
+                <h2>💫 Наша философия</h2>
+                <p>JINADA — это не просто одежда. Это способ выразить себя, свой характер и настроение. Мы против массового потребления и "одноразовой" моды. Вместо этого мы создаём вещи, которые остаются актуальными сезон за сезоном.</p>
+                <p>Наши коллекции вдохновлены уличной культурой, музыкой, искусством и путешествиями. Мы черпаем идеи в мегаполисах мира — от Токио до Нью-Йорка, от Лондона до Сеула, добавляя в каждую модель частичку свободы и драйва.</p>
+                <div class="quote">
+                    «Носи то, что любишь. Люби то, что носишь. Будь собой. Будь JINADA.»
+                </div>
+            </div>
+
+            <!-- Контакты -->
+            <div class="section">
+                <h2>📞 Свяжитесь с нами</h2>
+                <div class="contacts-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <h3>Email</h3>
+                        <a href="mailto:hello@jinada.by">JINADAshopver@gmail.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <h3>Telegram</h3>
+                        <a href="https://t.me/jinadamagaz_bot" target="_blank">@JINADAskum</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">📸</div>
+                        <h3>Instagram</h3>
+                        <a href="https://instagram.com/jinada.official" target="_blank">jinada.official</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">💬</div>
+                        <h3>WhatsApp</h3>
+                        <a href="https://wa.me/79256588814" target="_blank">+7 (925) 658-88-14</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Преимущества -->
+            <div class="section">
+                <h2>✨ Почему выбирают JINADA</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏭</div>
+                        <h4>Прямые поставки</h4>
+                        <p>Работаем напрямую с производством</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h4>Контроль качества</h4>
+                        <p>Каждая вещь проверяется лично</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌱</div>
+                        <h4>Экологичность</h4>
+                        <p>Сертифицированные ткани</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💎</div>
+                        <h4>Уникальный дизайн</h4>
+                        <p>Авторские модели</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚚</div>
+                        <h4>Быстрая доставка</h4>
+                        <p>По всей России и Беларуси</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h4>Возврат 14 дней</h4>
+                        <p>При сохранении товарного вида</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- График работы -->
+            <div class="section">
+                <h2>⏰ Режим работы</h2>
+                <div style="background: rgba(10,10,10,0.7); border-radius: 24px; padding: 1rem; border: 1px solid rgba(212, 175, 55, 0.3);">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; padding: 0.5rem 0; border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+                        <span style="color: #888;">Поддержка в Telegram</span>
+                        <span style="color: #e8e6e3;">10:00 — 20:00 (ежедневно)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; padding: 0.5rem 0; border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+                        <span style="color: #888;">Обработка заказов</span>
+                        <span style="color: #e8e6e3;">24/7</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; padding: 0.5rem 0;">
+                        <span style="color: #888;">Ответ на письма</span>
+                        <span style="color: #e8e6e3;">до 24 часов</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка в магазин -->
+            <div style="text-align: center;">
+                <a href="index.html" class="btn">🛒 Перейти в каталог</a>
+            </div>
+        </div>
+
+        <footer>
+            © 2024-2025 JINADA. Все права защищены.<br>
+            Уличная одежда с характером
+        </footer>
+    </div>
+
+    <div id="toast" class="toast">✅ Скопировано!</div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }).catch(() => {
+                alert('Нажмите Ctrl+C чтобы скопировать: ' + text);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Оплата заказа — JINADA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: radial-gradient(circle at 10% 30%, #121212, #000000);
+            position: relative;
+            color: #ece9e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 40%, rgba(212, 175, 55, 0.08), transparent 60%);
+            z-index: 0;
+            animation: slowDrift 12s infinite alternate;
+        }
+
+        @keyframes slowDrift {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        .payment-container {
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            width: 100%;
+            animation: fadeSlideUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .payment-card {
+            background: rgba(15, 15, 18, 0.92);
+            backdrop-filter: blur(24px);
+            border-radius: 48px;
+            padding: 1.8rem;
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            box-shadow: 0 30px 55px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.6rem;
+        }
+
+        .crown-icon {
+            font-size: 3.2rem;
+            margin-bottom: 0.3rem;
+            display: inline-block;
+            animation: crownSway 4s ease-in-out infinite;
+        }
+
+        @keyframes crownSway {
+            0% { transform: translateY(0px) rotate(-4deg); }
+            50% { transform: translateY(-6px) rotate(4deg); }
+            100% { transform: translateY(0px) rotate(-4deg); }
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #e6d5a8, #d4af37, #f5e7b2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #aaa6a0;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .order-info {
+            background: rgba(0, 0, 0, 0.55);
+            border-radius: 28px;
+            padding: 1.2rem;
+            margin-bottom: 1.6rem;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            text-align: center;
+        }
+
+        .order-number {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #d4c48c;
+            background: rgba(212, 175, 55, 0.1);
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-amount {
+            font-size: 2.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f5e7b2, #d4af37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .promo-section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(0, 0, 0, 0.4));
+            border-radius: 24px;
+            padding: 1rem;
+            margin-bottom: 1.6rem;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .promo-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d4b347;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .promo-header:hover {
+            color: #f5e7b2;
+        }
+
+        .promo-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .promo-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50px;
+            padding: 0.8rem 1.2rem;
+            color: #e8e6e3;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .promo-input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .promo-apply-btn {
+            background: linear-gradient(135deg, #d4af37, #b8942e);
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .promo-apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .promo-message {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .promo-message.success {
+            color: #6fcf97;
+        }
+
+        .promo-message.error {
+            color: #e74c3c;
+        }
+
+        .promo-message.warning {
+            color: #f39c12;
+        }
+
+        .promo-message.info {
+            color: #5dade2;
+        }
+
+        .discount-badge {
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 30px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            color: #d4af37;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 0.5rem;
+        }
+
+        .price-breakdown {
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed rgba(212, 175, 55, 0.2);
+            font-size: 0.8rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.3rem 0;
+            color: #aaa;
+        }
+
+        .price-row.total {
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .condition-text {
+            font-size: 0.7rem;
+            color: #777;
+            margin-top: 0.3rem;
+            font-style: italic;
+        }
+
+        .details-section {
+            background: rgba(10, 10, 12, 0.7);
+            border-radius: 26px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.6rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #b9b3a3;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #f0ead8;
+            font-size: 0.9rem;
+            font-family: monospace;
+            word-break: break-all;
+            text-align: right;
+        }
+
+        .detail-value.highlight {
+            color: #e6c86e;
+        }
+
+        .copy-btn {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            color: #d4af37;
+            padding: 0.2rem 0.75rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-left: 0.6rem;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+        }
+
+        .instruction {
+            background: linear-gradient(105deg, rgba(212, 175, 55, 0.08), rgba(0,0,0,0.5));
+            border-radius: 26px;
+            padding: 1.1rem 1.2rem;
+            margin-bottom: 1.6rem;
+            border-left: 4px solid #d4af37;
+            font-size: 0.8rem;
+        }
+
+        .instruction strong {
+            color: #e6c86e;
+        }
+
+        .instruction ol {
+            margin-left: 1.2rem;
+            margin-top: 0.6rem;
+            color: #ddd6c9;
+        }
+
+        .instruction li {
+            margin: 0.45rem 0;
+        }
+
+        .telegram-btn {
+            width: 100%;
+            background: linear-gradient(95deg, #1f8bcb, #2AABEE);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(42, 171, 238, 0.5);
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(20, 20, 26, 0.8);
+            border: 1px solid #d4af37;
+            color: #e9d69f;
+            padding: 0.75rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.25s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: #ffefb9;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e1a0e;
+            backdrop-filter: blur(12px);
+            color: #d4af37;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .used-badge {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 20px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.6rem;
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 520px) {
+            .payment-card { padding: 1.2rem; }
+            .order-amount { font-size: 1.8rem; }
+            .promo-input-group { flex-direction: column; }
+            .promo-apply-btn { padding: 0.7rem; }
+            .detail-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .detail-value { text-align: left; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="payment-container">
+    <div class="payment-card">
+        <div class="header">
+            <div class="crown-icon">👑✨</div>
+            <h1>Оплата JINADA</h1>
+            <p>Premium-способ оплаты за пару секунд</p>
+        </div>
+
+        <div class="order-info">
+            <div class="order-number" id="orderNumber">⚡ Загрузка...</div>
+            <div class="order-amount" id="orderAmount">0 ₽</div>
+        </div>
+
+        <!-- ПРОМОКОД БЛОК С ЗАЩИТОЙ ОТ ПОВТОРНОГО ИСПОЛЬЗОВАНИЯ -->
+        <div class="promo-section">
+            <div class="promo-header" id="promoHeader">
+                <span>🎁</span>
+                <span>Есть промокод? Нажмите, чтобы ввести</span>
+                <span id="promoArrow">▶</span>
+            </div>
+            <div id="promoContent" class="hidden">
+                <div class="promo-input-group">
+                    <input type="text" class="promo-input" id="promoInput" placeholder="Введите промокод (например, JINADA10)" autocomplete="off">
+                    <button class="promo-apply-btn" id="applyPromoBtn">Применить</button>
+                </div>
+                <div class="promo-message" id="promoMessage">
+                    💡 Доступные промокоды: 
+                    <strong>JINADA10</strong> (от 1000₽, 10%), 
+                    <strong>JINADA20</strong> (от 3000₽, 20%), 
+                    <strong>GOLD50</strong> (от 5000₽, 50%),
+                    <strong>SUMMER300</strong> (от 2000₽, −300₽),
+                    <strong>NEWBIE</strong> (без условий, 5%)
+                </div>
+                <div class="condition-text">
+                    ⚡ Каждый промокод можно использовать ТОЛЬКО ОДИН РАЗ на одного покупателя.
+                </div>
+                <div id="priceBreakdown" class="price-breakdown hidden">
+                    <div class="price-row">
+                        <span>Сумма заказа:</span>
+                        <span id="originalPrice">0 ₽</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Скидка:</span>
+                        <span id="discountAmount">-0 ₽</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Итого к оплате:</span>
+                        <span id="finalPrice">0 ₽</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- РЕКВИЗИТЫ -->
+        <div class="details-section">
+            <div class="detail-row">
+                <span class="detail-label">📞 СБП / Номер телефона</span>
+                <span class="detail-value highlight">
+                    +7 925 658-88-14
+                    <button class="copy-btn" data-copy="+79256588814">Копировать</button>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">💳 Карта Т-Банк</span>
+                <span class="detail-value">
+                    2200 7006 4639 9799
+                    <button class="copy-btn" data-copy="2200700646399799">Копировать</button>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">👤 Получатель</span>
+                <span class="detail-value highlight">
+                    Храмцов А.В
+                    <button class="copy-btn" data-copy="Храмцов А.В">Копировать</button>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">🏦 Банк получателя</span>
+                <span class="detail-value">АО «Т-Банк»</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">📝 Назначение платежа</span>
+                <span class="detail-value" id="paymentPurpose">Оплата заказа JINADA</span>
+                <button class="copy-btn" id="copyPurposeBtn" data-copy="">Копировать</button>
+            </div>
+        </div>
+
+        <div class="instruction">
+            <strong>✨ Инструкция по оплате:</strong>
+            <ol>
+                <li>Введите промокод (если есть) — скидка применится автоматически</li>
+                <li><strong>Промокод можно использовать только 1 раз</strong> — после применения он станет недоступным для вас</li>
+                <li>Скопируйте реквизиты (номер телефона или карты)</li>
+                <li>Переведите сумму в приложении вашего банка</li>
+                <li>После оплаты нажмите кнопку Telegram и отправьте чек</li>
+            </ol>
+        </div>
+
+        <button class="telegram-btn" id="telegramBtn">
+            ✈️ Отправить чек в Telegram
+        </button>
+        
+        <a href="index.html" class="btn-secondary">
+            ← Вернуться в магазин
+        </a>
+    </div>
+</div>
+
+<div id="toast" class="toast">✅ Скопировано!</div>
+
+<script>
+    // ==================== КЛЮЧИ ДЛЯ ХРАНЕНИЯ ИСПОЛЬЗОВАННЫХ ПРОМОКОДОВ ====================
+    const STORAGE_USED_PROMOS = "jinada_used_promocodes";     // список использованных промокодов для этого покупателя
+    const STORAGE_CUSTOMER_ID = "jinada_customer_id";         // уникальный ID покупателя
+    
+    // Получаем или создаём уникальный ID покупателя (на основе браузера/устройства)
+    function getCustomerId() {
+        let customerId = localStorage.getItem(STORAGE_CUSTOMER_ID);
+        if (!customerId) {
+            customerId = 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem(STORAGE_CUSTOMER_ID, customerId);
+        }
+        return customerId;
+    }
+    
+    // Получаем список использованных промокодов для этого покупателя
+    function getUsedPromoCodes() {
+        const used = localStorage.getItem(STORAGE_USED_PROMOS);
+        if (!used) return [];
+        try {
+            return JSON.parse(used);
+        } catch(e) {
+            return [];
+        }
+    }
+    
+    // Добавляем промокод в список использованных
+    function markPromoCodeAsUsed(promoCode) {
+        const used = getUsedPromoCodes();
+        if (!used.includes(promoCode)) {
+            used.push(promoCode);
+            localStorage.setItem(STORAGE_USED_PROMOS, JSON.stringify(used));
+        }
+    }
+    
+    // Проверяем, использовал ли покупатель этот промокод ранее
+    function isPromoCodeUsed(promoCode) {
+        const used = getUsedPromoCodes();
+        return used.includes(promoCode.toUpperCase());
+    }
+    
+    // ========== ДАННЫЕ ЗАКАЗА ==========
+    const urlParams = new URLSearchParams(window.location.search);
+    let orderId = urlParams.get('order_id');
+    let amount = urlParams.get('amount');
+    
+    if (!orderId) orderId = localStorage.getItem('last_order_id');
+    if (!amount) amount = localStorage.getItem('last_order_amount');
+    
+    if (!orderId) orderId = 'JIN-' + Date.now().toString().slice(-8);
+    if (!amount) amount = '2500';
+    
+    let originalAmount = parseInt(amount);
+    if (isNaN(originalAmount)) originalAmount = 2500;
+    
+    let orderCategory = urlParams.get('category') || 'all';
+    let currentPromoApplied = false;      // флаг, что промокод уже применён в этом заказе
+    let appliedPromoCode = null;           // какой промокод применён
+    
+    // ========== БАЗА ПРОМОКОДОВ ==========
+    const promoCodes = {
+        'JINADA10': {
+            type: 'percent',
+            value: 10,
+            minAmount: 1000,
+            message: 'Скидка 10% применена! Добро пожаловать!',
+            conditionText: '🎁 Для новых клиентов (от 1000₽)'
+        },
+        'JINADA20': {
+            type: 'percent',
+            value: 20,
+            minAmount: 3000,
+            message: 'Скидка 20% применена!',
+            conditionText: '🔥 Для заказов от 3000₽'
+        },
+        'GOLD50': {
+            type: 'percent',
+            value: 50,
+            minAmount: 5000,
+            message: 'ЗОЛОТАЯ скидка 50%! ✨',
+            conditionText: '👑 Для премиум-заказов от 5000₽'
+        },
+        'SUMMER300': {
+            type: 'fixed',
+            value: 300,
+            minAmount: 2000,
+            message: 'Скидка 300₽ применена! Летнее предложение ☀️',
+            conditionText: '🏖️ Скидка 300₽ при заказе от 2000₽'
+        },
+        'NEWBIE': {
+            type: 'percent',
+            value: 5,
+            minAmount: 0,
+            message: 'Скидка 5% для новичков!',
+            conditionText: '💫 Без минимальной суммы'
+        },
+        'MAXDISCOUNT': {
+            type: 'percent',
+            value: 15,
+            minAmount: 2000,
+            maxDiscount: 1000,
+            message: 'Скидка 15% (макс. 1000₽)',
+            conditionText: '🎯 Максимальная скидка 1000₽'
+        }
+    };
+    
+    let activePromo = null;
+    let currentDiscount = 0;
+    let finalAmount = originalAmount;
+    
+    function checkPromoConditions(promoCode, promoData, orderAmount, category) {
+        if (promoData.minAmount && orderAmount < promoData.minAmount) {
+            return {
+                valid: false,
+                message: `❌ Промокод "${promoCode}" требует минимальную сумму ${promoData.minAmount.toLocaleString()} ₽. Ваша сумма: ${orderAmount.toLocaleString()} ₽`
+            };
+        }
+        if (promoData.category && promoData.category !== category && promoData.category !== 'all') {
+            return {
+                valid: false,
+                message: `❌ Промокод "${promoCode}" действует только для категории: ${promoData.category}`
+            };
+        }
+        return { valid: true };
+    }
+    
+    function calculateDiscount(promoData, orderAmount) {
+        let discount = 0;
+        if (promoData.type === 'percent') {
+            discount = Math.round(orderAmount * promoData.value / 100);
+            if (promoData.maxDiscount && discount > promoData.maxDiscount) {
+                discount = promoData.maxDiscount;
+            }
+        } else if (promoData.type === 'fixed') {
+            discount = promoData.value;
+        }
+        if (discount > orderAmount) discount = orderAmount;
+        return discount;
+    }
+    
+    function applyPromoCode(code) {
+        const upperCode = code.toUpperCase().trim();
+        const promo = promoCodes[upperCode];
+        const messageDiv = document.getElementById('promoMessage');
+        
+        // Проверка: если промокод уже использован в этом заказе
+        if (currentPromoApplied) {
+            messageDiv.innerHTML = '⚠️ Вы уже применили промокод. Сбросьте текущий, чтобы использовать другой.';
+            messageDiv.className = 'promo-message warning';
+            return false;
+        }
+        
+        // Проверка: существование промокода
+        if (!promo) {
+            messageDiv.innerHTML = '❌ Неверный промокод. Попробуйте: JINADA10, JINADA20, GOLD50, SUMMER300, NEWBIE, MAXDISCOUNT';
+            messageDiv.className = 'promo-message error';
+            setTimeout(() => {
+                if (document.getElementById('promoMessage').className.includes('error')) {
+                    messageDiv.className = 'promo-message';
+                    messageDiv.innerHTML = '💡 Доступные промокоды с разными условиями';
+                }
+            }, 4000);
+            return false;
+        }
+        
+        // ========== ГЛАВНАЯ ЗАЩИТА: ПРОВЕРКА, НЕ ИСПОЛЬЗОВАЛ ЛИ ПОКУПАТЕЛЬ ЭТОТ ПРОМОКОД РАНЕЕ ==========
+        if (isPromoCodeUsed(upperCode)) {
+            messageDiv.innerHTML = `❌ Промокод "${upperCode}" уже был использован вами ранее. Каждый промокод можно применить только один раз!`;
+            messageDiv.className = 'promo-message error';
+            return false;
+        }
+        
+        // Проверка условий суммы/категории
+        const conditionCheck = checkPromoConditions(upperCode, promo, originalAmount, orderCategory);
+        if (!conditionCheck.valid) {
+            messageDiv.innerHTML = conditionCheck.message;
+            messageDiv.className = 'promo-message error';
+            return false;
+        }
+        
+        const discount = calculateDiscount(promo, originalAmount);
+        if (discount === 0) {
+            messageDiv.innerHTML = '⚠️ Скидка по промокоду составила 0₽';
+            messageDiv.className = 'promo-message warning';
+            return false;
+        }
+        
+        // Всё хорошо — применяем промокод и МГНОВЕННО отмечаем его как использованный
+        activePromo = { code: upperCode, data: promo, discount: discount };
+        currentDiscount = discount;
+        finalAmount = originalAmount - discount;
+        currentPromoApplied = true;
+        appliedPromoCode = upperCode;
+        
+        // СОХРАНЯЕМ В LOCALSTORAGE, ЧТОБЫ ПОВТОРНО НЕЛЬЗЯ БЫЛО ИСПОЛЬЗОВАТЬ
+        markPromoCodeAsUsed(upperCode);
+        
+        messageDiv.innerHTML = `✅ ${promo.message} Скидка: ${discount.toLocaleString()} ₽. Итого: ${finalAmount.toLocaleString()} ₽<br><span style="font-size:0.7rem;">🔒 Промокод больше нельзя использовать повторно</span>`;
+        messageDiv.className = 'promo-message success';
+        
+        updatePriceDisplay();
+        document.getElementById('priceBreakdown').classList.remove('hidden');
+        
+        // Показываем уведомление об одноразовости
+        showToast(`✅ Промокод ${upperCode} применён и больше недоступен для вас!`);
+        
+        return true;
+    }
+    
+    function resetPromoCode() {
+        if (!currentPromoApplied) return;
+        
+        // ВНИМАНИЕ: если мы сбрасываем промокод, он остаётся в "использованных"!
+        // Это сделано специально: после применения промокод считается использованным навсегда.
+        // Нельзя "отменить" применение, чтобы обойти защиту.
+        // Если пользователь хочет другой промокод — он не может повторно использовать старый.
+        // Но мы позволяем сбросить текущий, только если пользователь не подтвердил заказ.
+        // Для безопасности: сброс возможен только если заказ ещё не отправлен.
+        // В данной реализации мы НЕ разрешаем сброс, чтобы не нарушать логику одноразовости.
+        // Однако, если администратор хочет дать возможность — можно раскомментировать, но это опасно.
+        // Оставляем без функции сброса для защиты.
+        showToast("⚠️ Промокод уже активирован и отмечен как использованный. Сброс невозможен.", true);
+    }
+    
+    function updatePriceDisplay() {
+        document.getElementById('orderAmount').innerHTML = `${finalAmount.toLocaleString()} ₽`;
+        document.getElementById('originalPrice').innerHTML = `${originalAmount.toLocaleString()} ₽`;
+        
+        if (currentDiscount > 0) {
+            let discountText = `-${currentDiscount.toLocaleString()} ₽`;
+            if (activePromo && activePromo.data.type === 'percent') {
+                discountText += ` (${activePromo.data.value}%)`;
+            }
+            document.getElementById('discountAmount').innerHTML = discountText;
+        } else {
+            document.getElementById('discountAmount').innerHTML = `0 ₽`;
+        }
+        document.getElementById('finalPrice').innerHTML = `${finalAmount.toLocaleString()} ₽`;
+        
+        // Обновляем бейдж
+        const existingBadge = document.querySelector('.discount-badge');
+        if (existingBadge) existingBadge.remove();
+        if (currentDiscount > 0 && activePromo) {
+            const badge = document.createElement('div');
+            badge.className = 'discount-badge';
+            badge.innerHTML = `🎉 ${activePromo.data.message.split('!')[0]}! -${currentDiscount.toLocaleString()} ₽ <span class="used-badge">одноразовый</span>`;
+            document.querySelector('.order-number').after(badge);
+        }
+        
+        // Назначение платежа
+        const purposeText = `Оплата заказа ${orderId} (сумма ${finalAmount} ₽)`;
+        document.getElementById('paymentPurpose').innerText = purposeText;
+        const copyPurposeBtn = document.getElementById('copyPurposeBtn');
+        if (copyPurposeBtn) copyPurposeBtn.setAttribute('data-copy', purposeText);
+        
+        localStorage.setItem('last_order_amount', finalAmount.toString());
+    }
+    
+    // Инициализация страницы
+    document.getElementById('orderNumber').innerHTML = `📦 ЗАКАЗ: ${orderId}`;
+    updatePriceDisplay();
+    localStorage.setItem('last_order_id', orderId);
+    
+    // Toggle промокода
+    let promoExpanded = false;
+    const promoHeader = document.getElementById('promoHeader');
+    const promoContent = document.getElementById('promoContent');
+    const promoArrow = document.getElementById('promoArrow');
+    if (promoHeader) {
+        promoHeader.addEventListener('click', () => {
+            promoExpanded = !promoExpanded;
+            if (promoExpanded) {
+                promoContent.classList.remove('hidden');
+                promoArrow.innerHTML = '▼';
+            } else {
+                promoContent.classList.add('hidden');
+                promoArrow.innerHTML = '▶';
+            }
+        });
+    }
+    
+    // Применение промокода
+    const applyBtn = document.getElementById('applyPromoBtn');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            const input = document.getElementById('promoInput');
+            const code = input.value.trim();
+            if (code) {
+                applyPromoCode(code);
+                input.value = '';
+            } else {
+                const msgDiv = document.getElementById('promoMessage');
+                msgDiv.innerHTML = '⚠️ Введите промокод';
+                msgDiv.className = 'promo-message error';
+                setTimeout(() => {
+                    if (document.getElementById('promoMessage').className.includes('error')) {
+                        msgDiv.className = 'promo-message';
+                        msgDiv.innerHTML = '💡 Доступные промокоды: JINADA10, JINADA20, GOLD50, SUMMER300, NEWBIE, MAXDISCOUNT';
+                    }
+                }, 2500);
+            }
+        });
+    }
+    
+    // Копирование
+    function showToast(msg, isError = false) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.style.background = isError ? "rgba(204,68,68,0.9)" : "#1e1a0e";
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+    
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const textToCopy = btn.getAttribute('data-copy');
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showToast('✅ Скопировано!');
+                }).catch(() => {
+                    showToast('❌ Ошибка копирования');
+                });
+            }
+        });
+    });
+    
+    // Telegram
+    const telegramBtn = document.getElementById('telegramBtn');
+    if (telegramBtn) {
+        telegramBtn.addEventListener('click', () => {
+            localStorage.setItem('pending_order', JSON.stringify({
+                orderId: orderId,
+                amount: finalAmount,
+                originalAmount: originalAmount,
+                discount: currentDiscount,
+                promoCode: appliedPromoCode,
+                date: new Date().toLocaleString('ru-RU'),
+                phone: '+7 925 658-88-14'
+            }));
+            window.open(`https://t.me/jinadamagaz_bot?start=order_${orderId}`, '_blank');
+            showToast('✈️ Открываем Telegram...');
+        });
+    }
+    
+    // Анимация появления
+    const sections = ['.promo-section', '.details-section', '.instruction'];
+    sections.forEach((sel, idx) => {
+        const el = document.querySelector(sel);
+        if (el) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(12px)';
+            el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 100 + idx * 70);
+        }
+    });
+</script>
+</body>
+</html>

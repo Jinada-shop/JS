@@ -1,0 +1,11 @@
+[build]
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/bot"
+  to = "/.netlify/functions/bot"
+  status = 200
+  force = true

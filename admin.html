@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Админ-панель — JINADA | Управление магазином</title>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: #0a0a0a;
+            color: #e8e6e3;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            color: #d4af37;
+        }
+
+        .stat-card p {
+            color: #888;
+            font-size: 0.75rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .tab-btn:hover {
+            color: #d4af37;
+        }
+
+        .tab-btn.active {
+            background: #d4af37;
+            color: #0a0a0a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section {
+            background: #1a1a1a;
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .section h2 {
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            margin-bottom: 0.8rem;
+        }
+        .form-group label {
+            display: block;
+            color: #888;
+            font-size: 0.7rem;
+            margin-bottom: 0.2rem;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.6rem;
+            background: #0a0a0a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            color: #e8e6e3;
+            font-size: 0.85rem;
+        }
+        .form-row {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: #f5e7b2;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: none;
+            border: 1px solid #ff4444;
+            color: #ff8888;
+        }
+        .btn-sm {
+            padding: 0.2rem 0.6rem;
+            font-size: 0.7rem;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .products-table th, .products-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .products-table th {
+            color: #d4af37;
+        }
+        .products-table input {
+            background: #0a0a0a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 0.3rem;
+            color: #e8e6e3;
+            width: 100px;
+        }
+
+        .order-card {
+            background: #0a0a0a;
+            border-radius: 16px;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid #ff9800;
+        }
+        .order-card.paid { border-left-color: #4caf50; }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 0.3rem;
+        }
+        .order-id { color: #d4af37; font-weight: bold; }
+        .order-status {
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+        .order-status.pending { background: #ff9800; color: #0a0a0a; }
+        .order-status.paid { background: #4caf50; color: white; }
+        .order-details { font-size: 0.7rem; color: #ccc; margin: 0.3rem 0; }
+        .order-items { font-size: 0.7rem; background: #1a1a1a; border-radius: 12px; padding: 0.5rem; margin: 0.3rem 0; }
+        .order-actions { display: flex; gap: 0.3rem; margin-top: 0.5rem; flex-wrap: wrap; }
+
+        .user-list, .suggestions-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .user-item, .suggestion-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .user-name, .suggestion-user { font-weight: 600; }
+        .user-email, .suggestion-text { font-size: 0.7rem; color: #888; }
+
+        .color-card {
+            background: #0a0a0a;
+            border-radius: 16px;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .color-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .color-header input {
+            flex: 1;
+            padding: 0.5rem;
+            background: #1a1a1a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            color: #e8e6e3;
+        }
+        .gallery-section {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .gallery-title {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 0.3rem;
+        }
+        .gallery-grid {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .gallery-item {
+            position: relative;
+            width: 80px;
+        }
+        .gallery-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .gallery-item input {
+            width: 80px;
+            font-size: 0.6rem;
+            padding: 0.2rem;
+            margin-top: 0.2rem;
+            background: #1a1a1a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: #e8e6e3;
+            text-align: center;
+        }
+        .remove-gallery-img {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .add-gallery-btn {
+            background: none;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            margin-top: 0.3rem;
+        }
+        .remove-color-btn {
+            background: none;
+            border: 1px solid #ff4444;
+            color: #ff8888;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .empty-message {
+            color: #888;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #d4af37;
+            text-decoration: none;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid #d4af37;
+            border-radius: 40px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.7rem;
+            color: #d4af37;
+            display: none;
+            z-index: 1000;
+        }
+        .status.show { display: block; }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>👑 Админ-панель JINADA</h1>
+        
+        <div class="stats">
+            <div class="stat-card"><h3 id="totalUsers">0</h3><p>Пользователей</p></div>
+            <div class="stat-card"><h3 id="totalProducts">0</h3><p>Товаров</p></div>
+            <div class="stat-card"><h3 id="totalOrders">0</h3><p>Заказов</p></div>
+            <div class="stat-card"><h3 id="totalRevenue">0</h3><p>Выручка (₽)</p></div>
+            <div class="stat-card"><h3 id="totalSuggestions">0</h3><p>Предложений</p></div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="orders">📦 Заказы</button>
+            <button class="tab-btn" data-tab="products">🛍️ Товары</button>
+            <button class="tab-btn" data-tab="add-product">➕ Добавить товар</button>
+            <button class="tab-btn" data-tab="users">👥 Пользователи</button>
+            <button class="tab-btn" data-tab="suggestions">💡 Предложения</button>
+            <button class="tab-btn" data-tab="settings">⚙️ Настройки</button>
+        </div>
+
+        <div id="tab-orders" class="tab-content active">
+            <div class="section">
+                <h2>📋 Управление заказами
+                    <button class="btn btn-sm" onclick="loadOrders()">🔄 Обновить</button>
+                    <button class="btn btn-sm" onclick="exportOrders()">📥 Экспорт</button>
+                </h2>
+                <div id="ordersList"><div class="empty-message">Загрузка...</div></div>
+            </div>
+        </div>
+
+        <div id="tab-products" class="tab-content">
+            <div class="section">
+                <h2>🛍️ Управление товарами
+                    <button class="btn btn-sm" onclick="loadProducts()">🔄 Обновить</button>
+                    <button class="btn btn-sm" onclick="exportProducts()">📥 Экспорт</button>
+                    <button class="btn btn-sm btn-danger" onclick="clearAllProducts()" style="margin-left:0.5rem;">🗑️ Очистить все</button>
+                </h2>
+                <div style="overflow-x: auto;">
+                    <table class="products-table">
+                        <thead>
+                            <tr><th>ID</th><th>Код</th><th>Название</th><th>Цена</th><th>Скидка</th><th>Jinada</th><th>Действия</th></tr>
+                        </thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="section">
+                <h2>📁 Управление файлами товаров</h2>
+                <div class="form-row">
+                    <button class="btn" onclick="exportProductsToJSON()">📤 Экспортировать все товары в JSON</button>
+                    <button class="btn" onclick="importProductsFromJSON()">📥 Импортировать товары из JSON</button>
+                </div>
+                <div class="form-row" style="margin-top: 0.5rem;">
+                    <select id="categorySelect" class="form-group">
+                        <option value="men">Мужское</option>
+                        <option value="women">Женское</option>
+                        <option value="accessories">Аксессуары</option>
+                        <option value="kids">Детское</option>
+                        <option value="jinada">Jinada Style</option>
+                    </select>
+                    <button class="btn" onclick="exportCategoryToJSON()">📤 Экспортировать категорию</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-add-product" class="tab-content">
+            <div class="section">
+                <h2>➕ Добавить новый товар</h2>
+                <div class="form-row">
+                    <div class="form-group"><label>Название *</label><input type="text" id="productName" placeholder="Название товара"></div>
+                    <div class="form-group"><label>Цена (₽) *</label><input type="number" id="productPrice" step="1" placeholder="1990"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Категория</label>
+                        <select id="productCategory"><option value="men">👔 Мужское</option><option value="women">🌸 Женское</option><option value="accessories">🕶️ Аксессуары</option><option value="kids">🧸 Детское</option></select>
+                    </div>
+                    <div class="form-group"><label>Скидка (%)</label><input type="number" id="productDiscount" step="1" value="0"></div>
+                </div>
+                <div class="form-group"><label>Описание</label><textarea id="productDesc" rows="2" placeholder="Описание товара..."></textarea></div>
+                
+                <div class="form-group">
+                    <label>🎨 Цвета и галерея (до 5 фото на цвет)</label>
+                    <div id="colorsContainer"></div>
+                    <button type="button" class="btn btn-sm" onclick="addColorField()" style="margin-top: 0.5rem;">+ Добавить цвет</button>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group"><label>Размеры (через запятую)</label><input type="text" id="productSizes" placeholder="XS, S, M, L, XL"></div>
+                    <div class="form-group"><label>Код товара</label><input type="text" id="productCode" placeholder="JIN-XXX (оставьте пустым)"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Количество на складе</label><input type="number" id="productStock" value="10"></div>
+                    <div class="form-group"><label><input type="checkbox" id="productJinada"> Товар бренда Jinada</label></div>
+                </div>
+                <button class="btn" onclick="addNewProduct()" style="width:100%; margin-top: 0.5rem;">➕ Добавить товар</button>
+            </div>
+        </div>
+
+        <div id="tab-users" class="tab-content">
+            <div class="section">
+                <h2>👥 Список пользователей
+                    <button class="btn btn-sm" onclick="loadUsers()">🔄 Обновить</button>
+                    <button class="btn btn-sm" onclick="exportUsers()">📥 Экспорт</button>
+                    <button class="btn btn-sm btn-danger" onclick="clearAllUsers()">🗑️ Очистить</button>
+                </h2>
+                <div id="userList" class="user-list"><div class="empty-message">Загрузка...</div></div>
+            </div>
+        </div>
+
+        <div id="tab-suggestions" class="tab-content">
+            <div class="section">
+                <h2>💡 Предложения пользователей
+                    <button class="btn btn-sm" onclick="loadSuggestions()">🔄 Обновить</button>
+                    <button class="btn btn-sm" onclick="exportSuggestions()">📥 Экспорт</button>
+                    <button class="btn btn-sm btn-danger" onclick="clearAllSuggestions()">🗑️ Очистить</button>
+                </h2>
+                <div id="suggestionsList" class="suggestions-list"><div class="empty-message">Загрузка...</div></div>
+            </div>
+        </div>
+
+        <div id="tab-settings" class="tab-content">
+            <div class="section">
+                <h2>💱 Курс валют</h2>
+                <div class="form-row">
+                    <div class="form-group"><label>🇧🇾 1 BYN = ? RUB</label><input type="number" id="exchangeRateInput" step="0.01" value="27.02"></div>
+                    <button class="btn" onclick="saveExchangeRate()">💾 Сохранить</button>
+                </div>
+                <div class="current-rate" style="margin-top: 0.5rem; color: #d4af37;">Текущий курс: 1 BYN = <span id="currentRateValue">27.02</span> RUB</div>
+            </div>
+            <div class="section">
+                <h2>📧 Массовая рассылка</h2>
+                <textarea id="newsletterMessage" rows="4" style="width:100%; padding:0.8rem; background:#0a0a0a; border:1px solid rgba(212,175,55,0.3); border-radius:16px; color:#e8e6e3; margin-bottom:0.8rem;"></textarea>
+                <button class="btn" onclick="sendToAll()" style="width:100%;">📧 Отправить рассылку</button>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Вернуться в магазин</a>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script>
+        const EMAILJS_PUBLIC_KEY = "623rpX4tGZcYaQvjU";
+        const EMAILJS_SERVICE_ID = "service_swlfkd7";
+        const EMAILJS_NEWSLETTER_TEMPLATE_ID = "template_8609c8u";
+        
+        // === ЕДИНЫЕ КЛЮЧИ ДЛЯ ХРАНЕНИЯ (синхронизированы с главным магазином) ===
+        const STORAGE_KEYS = {
+            PRODUCTS: "jinada_products",
+            ORDERS: "jinada_orders",
+            USERS: "jinada_users",
+            SUGGESTIONS: "jinada_suggestions",
+            EXCHANGE_RATE: "jinada_exchange_rate"
+        };
+        
+        let users = [];
+        let products = [];
+        let suggestions = [];
+        let orders = [];
+        let exchangeRate = 27.02;
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById("status");
+            statusDiv.textContent = message;
+            statusDiv.style.background = isError ? "rgba(204,68,68,0.9)" : "#1a1a1a";
+            statusDiv.style.borderColor = isError ? "#ff4444" : "#d4af37";
+            statusDiv.classList.add("show");
+            setTimeout(() => statusDiv.classList.remove("show"), 3000);
+        }
+
+        function loadExchangeRate() {
+            const saved = localStorage.getItem(STORAGE_KEYS.EXCHANGE_RATE);
+            exchangeRate = (saved && !isNaN(parseFloat(saved))) ? parseFloat(saved) : 27.02;
+            const rateInput = document.getElementById("exchangeRateInput");
+            const rateValue = document.getElementById("currentRateValue");
+            if (rateInput) rateInput.value = exchangeRate;
+            if (rateValue) rateValue.innerText = exchangeRate.toFixed(2);
+        }
+
+        function saveExchangeRate() {
+            const newRate = parseFloat(document.getElementById("exchangeRateInput").value);
+            if (isNaN(newRate) || newRate <= 0) {
+                showStatus("❌ Введите корректный курс", true);
+                return;
+            }
+            exchangeRate = newRate;
+            localStorage.setItem(STORAGE_KEYS.EXCHANGE_RATE, exchangeRate);
+            document.getElementById("currentRateValue").innerText = exchangeRate.toFixed(2);
+            showStatus(`✅ Курс сохранён: 1 BYN = ${exchangeRate.toFixed(2)} RUB`);
+        }
+
+        // ========== ТОВАРЫ (используем единый ключ) ==========
+        function loadProducts() {
+            const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+            if (saved && saved !== "undefined" && saved !== "null") {
+                try {
+                    products = JSON.parse(saved);
+                } catch(e) {
+                    products = [];
+                }
+            }
+            
+            // Если товаров нет — создаём начальную базу
+            if (!products || products.length === 0) {
+                products = [
+                    { id: 1, code: "JIN-001", name: "Турбо бабка Дандадан", price: 3800, category: "men", jinada: false, discount: 5, desc: "Мужская толстовка с принтом", stock: 15, colors: [{ name: "Шоколадный", code: "#7B3F00", img: "https://placehold.co/600x800/7B3F00/white?text=JINADA", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 2, code: "JIN-002", name: "Человек бензопила", price: 1390, category: "men", jinada: false, discount: 5, desc: "Футболка с аниме принтом", stock: 8, colors: [{ name: "Белый", code: "#FFFFFF", img: "https://placehold.co/600x800/FFFFFF/black?text=CSM", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 3, code: "JIN-003", name: "СССР Костюм", price: 5700, category: "men", jinada: false, discount: 0, desc: "Спортивный костюм в стиле ретро", stock: 3, colors: [{ name: "Белый", code: "#FFFFFF", img: "https://placehold.co/600x800/FFFFFF/red?text=USSR", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 4, code: "JIN-004", name: "Коты инь-янь", price: 5200, category: "women", jinada: false, discount: 10, desc: "Уютный костюм с котами", stock: 0, colors: [{ name: "Черный", code: "#000000", img: "https://placehold.co/600x800/000000/white?text=Cats", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 5, code: "JIN-005", name: "Щит и топоры", price: 4900, category: "men", jinada: false, discount: 0, desc: "Скандинавский стиль", stock: 25, colors: [{ name: "Черный", code: "#000000", img: "https://placehold.co/600x800/000000/white?text=Vikings", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 6, code: "JIN-006", name: "Славянский орнамент", price: 1950, category: "men", jinada: true, discount: 30, desc: "Лонгслив с узорами", stock: 2, colors: [{ name: "Белый", code: "#FFFFFF", img: "https://placehold.co/600x800/FFFFFF/black?text=Slav", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 7, code: "JIN-007", name: "JINADA Hoodie Black", price: 4200, category: "jinada", jinada: true, discount: 15, desc: "Фирменный худи премиум", stock: 20, colors: [{ name: "Черный", code: "#000000", img: "https://placehold.co/600x800/000000/gold?text=JINADA", gallery: [] }], sizes: ["S","M","L","XL"] },
+                    { id: 8, code: "JIN-008", name: "Silver Chain", price: 2990, category: "accessories", jinada: true, discount: 0, desc: "Серебряная цепь", stock: 12, colors: [{ name: "Silver", code: "#C0C0C0", img: "https://placehold.co/600x800/C0C0C0/white?text=Chain", gallery: [] }], sizes: [] }
+                ];
+                saveProducts();
+            }
+            renderProductsTable();
+            document.getElementById("totalProducts").innerText = products.length;
+            updateStats();
+        }
+
+        function saveProducts() { 
+            localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
+            // Триггерим событие для обновления других вкладок (если нужно)
+            window.dispatchEvent(new Event('productsUpdated'));
+        }
+
+        function renderProductsTable() {
+            const tbody = document.getElementById("productsTableBody");
+            if (!products.length) {
+                tbody.innerHTML = "<tr><td colspan='7' class='empty-message'>Нет товаров</td></tr>";
+                return;
+            }
+            tbody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.code || '-'}</td>
+                    <td>${escapeHtml(p.name)}</td>
+                    <td><input type="number" id="price_${p.id}" step="1" value="${p.price}" style="width:100px;"></td>
+                    <td>${p.discount || 0}%</td>
+                    <td>${p.jinada ? '✅' : '❌'}</td>
+                    <td>
+                        <button class="btn btn-sm" onclick="saveProductPrice(${p.id})">💾</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})">🗑️</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function saveProductPrice(productId) {
+            const input = document.getElementById(`price_${productId}`);
+            if (!input) return;
+            const newPrice = parseFloat(input.value);
+            if (isNaN(newPrice) || newPrice <= 0) {
+                showStatus("❌ Введите корректную цену", true);
+                return;
+            }
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                product.price = newPrice;
+                saveProducts();
+                showStatus(`✅ Цена "${product.name}" обновлена: ${newPrice} ₽`);
+            }
+        }
+
+        function deleteProduct(productId) {
+            if (!confirm("Удалить товар?")) return;
+            products = products.filter(p => p.id !== productId);
+            saveProducts();
+            loadProducts();
+            showStatus("✅ Товар удалён");
+        }
+        
+        function clearAllProducts() {
+            if (!confirm("⚠️ ВНИМАНИЕ! Это удалит ВСЕ товары. Продолжить?")) return;
+            products = [];
+            saveProducts();
+            loadProducts();
+            showStatus("✅ Все товары удалены");
+        }
+
+        function exportProductsToJSON() {
+            if (!products.length) { showStatus("Нет товаров для экспорта", true); return; }
+            const dataStr = JSON.stringify(products, null, 2);
+            const blob = new Blob([dataStr], {type: "application/json"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `jinada_all_products_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            showStatus("✅ Все товары экспортированы");
+        }
+        
+        function exportCategoryToJSON() {
+            const category = document.getElementById('categorySelect').value;
+            const categoryProducts = products.filter(p => {
+                if (category === 'jinada') return p.jinada === true;
+                return p.category === category;
+            });
+            if (!categoryProducts.length) { showStatus(`Нет товаров в категории ${category}`, true); return; }
+            const dataStr = JSON.stringify(categoryProducts, null, 2);
+            const blob = new Blob([dataStr], {type: "application/json"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `jinada_${category}_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            showStatus(`✅ Экспортировано ${categoryProducts.length} товаров категории ${category}`);
+        }
+        
+        function importProductsFromJSON() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    try {
+                        const importedProducts = JSON.parse(evt.target.result);
+                        if (Array.isArray(importedProducts)) {
+                            products = importedProducts;
+                            saveProducts();
+                            loadProducts();
+                            showStatus(`✅ Импортировано ${products.length} товаров`);
+                        } else {
+                            showStatus("❌ Неверный формат файла", true);
+                        }
+                    } catch(err) {
+                        showStatus("❌ Ошибка чтения файла", true);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // Цвета и галерея
+        let colorCounter = 0;
+        function addColorField() {
+            const container = document.getElementById("colorsContainer");
+            const colorId = Date.now() + colorCounter++;
+            const colorDiv = document.createElement('div');
+            colorDiv.className = 'color-card';
+            colorDiv.id = `color_${colorId}`;
+            colorDiv.innerHTML = `
+                <div class="color-header">
+                    <input type="text" placeholder="Название цвета" class="color-name" value="Черный">
+                    <input type="text" placeholder="HEX код" class="color-code" value="#000000">
+                    <input type="text" placeholder="Главное фото URL" class="main-img" value="https://placehold.co/600x800/000000/white?text=JINADA">
+                    <button type="button" class="remove-color-btn" onclick="this.closest('.color-card').remove()">🗑️ Удалить цвет</button>
+                </div>
+                <div class="gallery-section">
+                    <div class="gallery-title">📸 Галерея (дополнительные фото)</div>
+                    <div class="gallery-grid" id="gallery_${colorId}"></div>
+                    <button type="button" class="add-gallery-btn" onclick="addGalleryImage('${colorId}')">+ Добавить фото в галерею</button>
+                </div>
+            `;
+            container.appendChild(colorDiv);
+            addGalleryImage(colorId);
+        }
+        
+        function addGalleryImage(colorId) {
+            const galleryContainer = document.getElementById(`gallery_${colorId}`);
+            if (!galleryContainer) return;
+            if (galleryContainer.children.length >= 5) { showStatus("❌ Максимум 5 фото", true); return; }
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `
+                <img src="https://placehold.co/600x800/333/white?text=img" onerror="this.src='https://placehold.co/600x800/333/white?text=error'">
+                <input type="text" placeholder="URL фото" value="https://placehold.co/600x800/444/white?text=photo">
+                <button class="remove-gallery-img" onclick="this.parentElement.remove()">✕</button>
+            `;
+            galleryContainer.appendChild(galleryItem);
+        }
+        
+        function collectColors() {
+            const colors = [];
+            document.querySelectorAll("#colorsContainer .color-card").forEach(card => {
+                const colorName = card.querySelector('.color-name')?.value.trim();
+                if (!colorName) return;
+                const colorCode = card.querySelector('.color-code')?.value.trim() || "#000000";
+                const mainImg = card.querySelector('.main-img')?.value.trim() || "https://placehold.co/600x800";
+                const gallery = [];
+                card.querySelectorAll('.gallery-item input').forEach(inp => { if(inp.value.trim()) gallery.push(inp.value.trim()); });
+                colors.push({ name: colorName, code: colorCode, img: mainImg, gallery });
+            });
+            return colors;
+        }
+        
+        function getNextId() { return products.length ? Math.max(...products.map(p=>p.id),0)+1 : 1; }
+        function generateProductCode() { return `JIN-${String(getNextId()).padStart(3,'0')}`; }
+        
+        function addNewProduct() {
+            const name = document.getElementById("productName").value.trim();
+            const price = parseFloat(document.getElementById("productPrice").value);
+            if(!name || isNaN(price) || price<=0) { showStatus("❌ Заполните название и цену", true); return; }
+            const colors = collectColors();
+            if(colors.length===0) colors.push({ name:"Стандарт", code:"#808080", img:"https://placehold.co/600x800", gallery:[] });
+            const newProduct = {
+                id: getNextId(),
+                code: document.getElementById("productCode").value.trim() || generateProductCode(),
+                name, 
+                price, 
+                category: document.getElementById("productCategory").value,
+                jinada: document.getElementById("productJinada").checked,
+                desc: document.getElementById("productDesc").value.trim() || "Новый товар",
+                discount: parseInt(document.getElementById("productDiscount").value) || 0,
+                stock: parseInt(document.getElementById("productStock").value) || 10,
+                colors, 
+                sizes: document.getElementById("productSizes").value.trim().split(/[,，]+/).map(s=>s.trim()).filter(s=>s)
+            };
+            products.push(newProduct);
+            saveProducts();
+            loadProducts();
+            // Очистка формы
+            document.getElementById("productName").value = "";
+            document.getElementById("productPrice").value = "";
+            document.getElementById("productDesc").value = "";
+            document.getElementById("productSizes").value = "";
+            document.getElementById("productCode").value = "";
+            document.getElementById("productDiscount").value = "0";
+            document.getElementById("productStock").value = "10";
+            document.getElementById("productJinada").checked = false;
+            document.getElementById("colorsContainer").innerHTML = "";
+            showStatus(`✅ Товар "${name}" добавлен!`);
+        }
+        
+        function exportProducts() {
+            if(!products.length) { showStatus("Нет товаров", true); return; }
+            const blob = new Blob([JSON.stringify(products,null,2)], {type:"application/json"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `jinada_products_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            showStatus(`✅ Экспортировано ${products.length} товаров`);
+        }
+
+        // ========== ЗАКАЗЫ ==========
+        function loadOrders() {
+            const saved = localStorage.getItem(STORAGE_KEYS.ORDERS);
+            orders = (saved && saved !== "undefined") ? JSON.parse(saved) : [];
+            renderOrdersList();
+            updateStats();
+        }
+        
+        function saveOrders() { localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders)); }
+        
+        function renderOrdersList() {
+            const container = document.getElementById("ordersList");
+            if (!orders.length) { container.innerHTML = "<div class='empty-message'>😕 Нет заказов</div>"; return; }
+            container.innerHTML = orders.slice().reverse().map(order => {
+                const statusClass = order.status === 'paid' ? 'paid' : 'pending';
+                const statusText = order.status === 'paid' ? '✅ Оплачен' : '⏳ Ожидает оплаты';
+                return `<div class="order-card ${statusClass}">
+                    <div class="order-header"><span class="order-id">📦 ${order.id}</span><span class="order-status ${statusClass}">${statusText}</span></div>
+                    <div class="order-details"><strong>${escapeHtml(order.name || '—')}</strong> | ${order.phone || '—'}<br>📅 ${new Date(order.date).toLocaleString()}</div>
+                    <div class="order-items"><strong>Товары:</strong><br>${order.items?.map(i => `${i.name} x${i.quantity} — ${(i.price * i.quantity).toLocaleString()} ₽`).join('<br>') || '—'}</div>
+                    <div class="order-actions">
+                        <span style="color:#d4af37;">💰 ${(order.total || 0).toLocaleString()} ₽</span>
+                        ${order.status === 'pending' ? `<button class="btn btn-sm" onclick="updateOrderStatus('${order.id}', 'paid')">✅ Подтвердить оплату</button>` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.id}')">🗑️ Удалить</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        
+        async function updateOrderStatus(orderId, newStatus) {
+            const idx = orders.findIndex(o => o.id === orderId);
+            if(idx===-1) return;
+            orders[idx].status = newStatus;
+            saveOrders();
+            renderOrdersList();
+            showStatus(`✅ Статус заказа ${orderId} обновлён`);
+            updateStats();
+        }
+        
+        function deleteOrder(orderId) {
+            if(!confirm(`Удалить заказ ${orderId}?`)) return;
+            orders = orders.filter(o => o.id !== orderId);
+            saveOrders();
+            renderOrdersList();
+            updateStats();
+            showStatus(`✅ Заказ удалён`);
+        }
+        
+        function exportOrders() {
+            if(!orders.length) { showStatus("Нет заказов", true); return; }
+            const blob = new Blob([JSON.stringify(orders,null,2)], {type:"application/json"});
+            const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+            a.download = `jinada_orders_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            showStatus(`✅ Экспортировано ${orders.length} заказов`);
+        }
+
+        // ========== ПОЛЬЗОВАТЕЛИ ==========
+        function loadUsers() {
+            const saved = localStorage.getItem(STORAGE_KEYS.USERS);
+            users = (saved && saved !== "undefined") ? JSON.parse(saved) : [];
+            if(!users.length) {
+                users = [
+                    { id: "u1", name: "Алексей", email: "alex@example.com", subscribeDate: new Date().toISOString() },
+                    { id: "u2", name: "Мария", email: "maria@example.com", subscribeDate: new Date().toISOString() },
+                    { id: "u3", name: "Дмитрий", email: "dima@jinada.ru", subscribeDate: new Date().toISOString() }
+                ];
+                saveUsers();
+            }
+            renderUserList();
+            updateStats();
+        }
+        
+        function saveUsers() { localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users)); }
+        
+        function renderUserList() {
+            const container = document.getElementById("userList");
+            if (!users.length) { container.innerHTML = "<div class='empty-message'>😕 Нет пользователей</div>"; return; }
+            container.innerHTML = users.map(user => `<div class="user-item"><div><div class="user-name">${escapeHtml(user.name)}</div><div class="user-email">${user.email || "— нет email —"}</div><div class="user-date">📅 ${user.subscribeDate ? new Date(user.subscribeDate).toLocaleDateString() : "неизвестно"}</div></div><button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">🗑️</button></div>`).join("");
+        }
+        
+        function deleteUser(userId) { if(confirm("Удалить?")) { users = users.filter(u=>u.id!==userId); saveUsers(); renderUserList(); updateStats(); showStatus("✅ Пользователь удалён"); } }
+        function clearAllUsers() { if(confirm("Удалить ВСЕХ пользователей?")) { users = []; saveUsers(); renderUserList(); updateStats(); showStatus("✅ Все пользователи удалены"); } }
+        function exportUsers() {
+            if(!users.length) { showStatus("Нет пользователей", true); return; }
+            const blob = new Blob([JSON.stringify(users,null,2)], {type:"application/json"});
+            const a = document.createElement("a"); a.download = `jinada_users_${new Date().toISOString().slice(0,19)}.json`; a.href = URL.createObjectURL(blob); a.click();
+            showStatus(`✅ Экспортировано ${users.length} пользователей`);
+        }
+
+        // ========== ПРЕДЛОЖЕНИЯ ==========
+        function loadSuggestions() {
+            const saved = localStorage.getItem(STORAGE_KEYS.SUGGESTIONS);
+            suggestions = (saved && saved !== "undefined") ? JSON.parse(saved) : [];
+            renderSuggestionsList();
+            updateStats();
+        }
+        
+        function renderSuggestionsList() {
+            const container = document.getElementById("suggestionsList");
+            if(!suggestions.length) { container.innerHTML = "<div class='empty-message'>💡 Нет предложений</div>"; return; }
+            container.innerHTML = suggestions.slice().reverse().map(s => `<div class="suggestion-item"><div><div class="suggestion-user">👤 ${escapeHtml(s.userName)}</div><div class="suggestion-text">📝 ${escapeHtml(s.text)}</div><div style="font-size:0.65rem; color:#555;">📅 ${new Date(s.date).toLocaleString()}</div></div><button class="btn btn-sm" onclick="deleteSuggestion(${s.id})">✓ Прочитано</button></div>`).join("");
+        }
+        
+        function deleteSuggestion(id) { suggestions = suggestions.filter(s=>s.id!==id); localStorage.setItem(STORAGE_KEYS.SUGGESTIONS, JSON.stringify(suggestions)); loadSuggestions(); showStatus("✅ Предложение отмечено"); }
+        function clearAllSuggestions() { if(confirm("Удалить все предложения?")) { suggestions = []; localStorage.setItem(STORAGE_KEYS.SUGGESTIONS, JSON.stringify(suggestions)); loadSuggestions(); showStatus("✅ Очищено"); } }
+        function exportSuggestions() {
+            if(!suggestions.length) { showStatus("Нет предложений", true); return; }
+            const blob = new Blob([JSON.stringify(suggestions,null,2)], {type:"application/json"});
+            const a = document.createElement("a"); a.download = `jinada_suggestions_${new Date().toISOString().slice(0,19)}.json`; a.href = URL.createObjectURL(blob); a.click();
+            showStatus(`✅ Экспортировано ${suggestions.length}`);
+        }
+
+        function updateStats() {
+            document.getElementById("totalUsers").innerText = users.length;
+            document.getElementById("totalProducts").innerText = products.length;
+            document.getElementById("totalOrders").innerText = orders.length;
+            document.getElementById("totalSuggestions").innerText = suggestions.length;
+            const revenue = orders.filter(o => o.status === 'paid').reduce((sum, o) => sum + (o.total || 0), 0);
+            document.getElementById("totalRevenue").innerText = revenue.toLocaleString();
+        }
+
+        async function sendEmail(userEmail, userName, message) {
+            try { 
+                if (typeof emailjs !== 'undefined') {
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_NEWSLETTER_TEMPLATE_ID, { to_email: userEmail, to_name: userName, message, site_url: window.location.origin }); 
+                }
+                return true; 
+            } catch(e) { 
+                return false; 
+            }
+        }
+        
+        async function sendToAll() {
+            const message = document.getElementById("newsletterMessage").value.trim();
+            if(!message) { showStatus("Введите текст рассылки", true); return; }
+            const usersWithEmail = users.filter(u => u.email && u.email.includes("@"));
+            if(!usersWithEmail.length) { showStatus("Нет email для рассылки", true); return; }
+            showStatus(`⏳ Отправка ${usersWithEmail.length}...`);
+            let success=0, fail=0;
+            for(const user of usersWithEmail) {
+                const sent = await sendEmail(user.email, user.name, message);
+                sent ? success++ : fail++;
+                await new Promise(r=>setTimeout(r,500));
+            }
+            showStatus(`✅ Рассылка: успешно ${success}, ошибок ${fail}`);
+        }
+
+        function setupTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.dataset.tab;
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-${tabId}`).classList.add('active');
+                    if(tabId === 'orders') loadOrders();
+                    if(tabId === 'users') loadUsers();
+                    if(tabId === 'suggestions') loadSuggestions();
+                    if(tabId === 'products') loadProducts();
+                });
+            });
+        }
+
+        // Инициализация
+        if(typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PUBLIC_KEY);
+        loadExchangeRate();
+        loadProducts();
+        loadUsers();
+        loadSuggestions();
+        loadOrders();
+        setupTabs();
+        
+        // Автообновление при фокусе
+        window.addEventListener('focus', () => { 
+            loadUsers(); 
+            loadSuggestions(); 
+            loadOrders(); 
+            loadProducts(); 
+        });
+    </script>
+</body>
+</html>

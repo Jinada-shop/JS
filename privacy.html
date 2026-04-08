@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Политика конфиденциальности — JINADA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: #e8e6e3;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            animation: goldPulse 4s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes goldPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .jinada-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .back-link {
+            color: #d4af37;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .document-card {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .crown {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: crownFloat 3s ease-in-out infinite;
+        }
+        @keyframes crownFloat {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(-5deg); }
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        .header p {
+            color: #aaa;
+            margin-top: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        .content-section {
+            margin-bottom: 1.5rem;
+        }
+        .content-section h2 {
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid #d4af37;
+            padding-left: 0.8rem;
+        }
+        .content-section p {
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+        .content-section ul {
+            margin-left: 1.5rem;
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .content-section li {
+            margin: 0.3rem 0;
+        }
+        .content-section .highlight {
+            color: #d4af37;
+        }
+
+        .last-updated {
+            text-align: right;
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #0a0a0a;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: #f5e7b2;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1rem; }
+            .document-card { padding: 1.2rem; }
+            .header h1 { font-size: 1.4rem; }
+            .content-section h2 { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo" onclick="location.href='index.html'">
+                <span class="jinada-gold">JINADA</span>
+            </div>
+            <a href="index.html" class="back-link">← Вернуться в магазин</a>
+        </div>
+
+        <div class="document-card">
+            <div class="header">
+                <div class="crown">👑</div>
+                <h1>Политика конфиденциальности</h1>
+                <p>Защита ваших персональных данных</p>
+            </div>
+
+            <div class="content-section">
+                <h2>1. Общие положения</h2>
+                <p>Настоящая Политика конфиденциальности (далее — «Политика») регулирует отношения по обработке, использованию и хранению персональных данных пользователей интернет-магазина JINADA (далее — «Сайт»).</p>
+                <p>Используя Сайт, вы даете согласие на сбор и обработку ваших персональных данных в соответствии с настоящей Политикой.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>2. Какие данные мы собираем</h2>
+                <p>При оформлении заказа или регистрации на Сайте мы можем запросить следующую информацию:</p>
+                <ul>
+                    <li>📌 Имя, фамилия, отчество</li>
+                    <li>📌 Контактный номер телефона</li>
+                    <li>📌 Адрес электронной почты (email)</li>
+                    <li>📌 Адрес доставки</li>
+                    <li>📌 История заказов</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>3. Как мы используем ваши данные</h2>
+                <p>Ваши персональные данные используются исключительно для:</p>
+                <ul>
+                    <li>✅ Обработки и доставки ваших заказов</li>
+                    <li>✅ Связи с вами по вопросам заказов</li>
+                    <li>✅ Улучшения качества обслуживания</li>
+                    <li>✅ Информирования о акциях и новинках (только с вашего согласия)</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>4. Передача данных третьим лицам</h2>
+                <p>Мы не передаем ваши персональные данные третьим лицам, за исключением случаев, предусмотренных законодательством РФ, а также случаев, необходимых для доставки заказа (транспортным компаниям и почтовым службам).</p>
+            </div>
+
+            <div class="content-section">
+                <h2>5. Хранение и защита данных</h2>
+                <p>Мы принимаем все необходимые меры для защиты ваших персональных данных от несанкционированного доступа, изменения, раскрытия или уничтожения. Данные хранятся на защищенных серверах.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>6. Ваши права</h2>
+                <p>Вы имеете право:</p>
+                <ul>
+                    <li>🔹 Запросить информацию о ваших персональных данных</li>
+                    <li>🔹 Требовать исправления неточных данных</li>
+                    <li>🔹 Требовать удаления ваших данных</li>
+                    <li>🔹 Отозвать согласие на обработку данных</li>
+                </ul>
+                <p>Для реализации ваших прав свяжитесь с нами по email: <span class="highlight">hello@jinada.by</span></p>
+            </div>
+
+            <div class="content-section">
+                <h2>7. Файлы cookie</h2>
+                <p>Сайт использует файлы cookie для улучшения работы и анализа трафика. Вы можете отключить cookie в настройках вашего браузера, но это может повлиять на функциональность сайта.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>8. Изменение политики</h2>
+                <p>Мы оставляем за собой право вносить изменения в настоящую Политику. Актуальная версия всегда доступна по этому адресу. Изменения вступают в силу с момента публикации.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>9. Контактная информация</h2>
+                <p>По всем вопросам, связанным с обработкой персональных данных, вы можете обратиться:</p>
+                <ul>
+                    <li>📧 Email: <span class="highlight">hello@jinada.by</span></li>
+                    <li>📱 Telegram: <span class="highlight">@jinadamagaz_bot</span></li>
+                    <li>📞 Телефон: <span class="highlight">+7 (925) 658-88-14</span></li>
+                </ul>
+            </div>
+
+            <div class="last-updated">
+                Последнее обновление: 05 апреля 2025 г.
+            </div>
+
+            <div style="text-align: center;">
+                <a href="index.html" class="btn">🛒 Вернуться в магазин</a>
+            </div>
+        </div>
+
+        <footer>
+            © 2024-2025 JINADA. Все права защищены.<br>
+            ИП Храмцов Александр Владимирович
+        </footer>
+    </div>
+</body>
+</html>

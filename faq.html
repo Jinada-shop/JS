@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Вопросы и ответы — JINADA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: #e8e6e3;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            animation: goldPulse 4s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes goldPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .jinada-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .back-link {
+            color: #d4af37;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .faq-card {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .crown {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: crownFloat 3s ease-in-out infinite;
+        }
+        @keyframes crownFloat {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(-5deg); }
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        .header p {
+            color: #aaa;
+            margin-top: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        /* Поиск по FAQ */
+        .faq-search {
+            margin-bottom: 2rem;
+        }
+        .faq-search input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: #0a0a0a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 60px;
+            color: #e8e6e3;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .faq-search input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        .faq-search input::placeholder {
+            color: #666;
+        }
+
+        /* Категории FAQ */
+        .faq-categories {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .faq-cat-btn {
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: #e8e6e3;
+            transition: all 0.3s;
+        }
+        .faq-cat-btn:hover, .faq-cat-btn.active {
+            background: #d4af37;
+            color: #0a0a0a;
+        }
+
+        /* Аккордеон FAQ */
+        .faq-section {
+            margin-bottom: 1.5rem;
+        }
+        .faq-section-title {
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .faq-item {
+            background: rgba(10, 10, 10, 0.5);
+            border-radius: 16px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.2s;
+        }
+        .faq-item:hover {
+            border-color: #d4af37;
+        }
+        .faq-question {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: rgba(26, 26, 26, 0.8);
+        }
+        .faq-question:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        .faq-question .icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .faq-item.open .faq-question .icon {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            padding: 0 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        .faq-item.open .faq-answer {
+            padding: 0 1rem 1rem 1rem;
+            max-height: 300px;
+        }
+        .faq-answer ul, .faq-answer ol {
+            margin-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .faq-answer li {
+            margin: 0.3rem 0;
+        }
+        .faq-answer a {
+            color: #d4af37;
+            text-decoration: none;
+        }
+        .faq-answer a:hover {
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+        }
+
+        .contact-block {
+            background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.02));
+            border-radius: 28px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .contact-block h3 {
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+        }
+        .contact-block .btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #0a0a0a;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.8rem;
+            transition: all 0.3s;
+        }
+        .contact-block .btn:hover {
+            background: #f5e7b2;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1rem; }
+            .faq-card { padding: 1.2rem; }
+            .faq-question { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo" onclick="location.href='index.html'">
+                <span class="jinada-gold">JINADA</span>
+            </div>
+            <a href="index.html" class="back-link">← Вернуться в магазин</a>
+        </div>
+
+        <div class="faq-card">
+            <div class="header">
+                <div class="crown">👑</div>
+                <h1>Часто задаваемые вопросы</h1>
+                <p>Ответы на самые популярные вопросы о JINADA</p>
+            </div>
+
+            <!-- Поиск -->
+            <div class="faq-search">
+                <input type="text" id="faqSearchInput" placeholder="🔍 Поиск по вопросам..." onkeyup="searchFaq()">
+            </div>
+
+            <!-- Категории -->
+            <div class="faq-categories" id="faqCategories">
+                <button class="faq-cat-btn active" data-cat="all">Все вопросы</button>
+                <button class="faq-cat-btn" data-cat="order">📦 Заказ и оплата</button>
+                <button class="faq-cat-btn" data-cat="delivery">🚚 Доставка</button>
+                <button class="faq-cat-btn" data-cat="return">🔄 Возврат и обмен</button>
+                <button class="faq-cat-btn" data-cat="product">👕 Товары</button>
+                <button class="faq-cat-btn" data-cat="other">❓ Другое</button>
+            </div>
+
+            <!-- Контейнер для вопросов -->
+            <div id="faqContainer"></div>
+
+            <!-- Блок с контактами -->
+            <div class="contact-block">
+                <h3>❓ Не нашли ответ?</h3>
+                <p>Свяжитесь с нами, и мы поможем!</p>
+                <a href="https://t.me/jinadamagaz_bot" target="_blank" class="btn">📱 Написать в Telegram</a>
+            </div>
+        </div>
+
+        <footer>
+            © 2024-2025 JINADA. Все права защищены.<br>
+            ИП Храмцов Александр Владимирович
+        </footer>
+    </div>
+
+    <script>
+        // ========== ДАННЫЕ FAQ ==========
+        const faqData = [
+            // Заказ и оплата
+            { id: 1, category: "order", question: "Как оформить заказ?", answer: "Выберите товар в каталоге, добавьте в корзину, перейдите в корзину и нажмите «Оформить заказ». Заполните форму с контактными данными и выберите способ оплаты." },
+            { id: 2, category: "order", question: "Какие способы оплаты доступны?", answer: "Мы принимаем оплату банковскими картами (Visa, Mastercard, МИР), через СБП (Система быстрых платежей), наличными при получении." },
+            { id: 3, category: "order", question: "Нужно ли регистрироваться для заказа?", answer: "Регистрация не обязательна, но рекомендуется. Зарегистрированные пользователи могут отслеживать статус заказа в личном кабинете и получать бонусы." },
+            { id: 4, category: "order", question: "Как узнать статус заказа?", answer: "Статус заказа можно отследить в личном кабинете на сайте или в Telegram @jsadmin2026." },
+            { id: 5, category: "order", question: "Можно ли изменить или отменить заказ?", answer: "Да, вы можете изменить или отменить заказ до его отправки. Свяжитесь с нами через Telegram @jsadmin2026." },
+            
+            // Доставка
+            { id: 6, category: "delivery", question: "Сколько стоит доставка?", answer: "Стоимость доставки зависит от региона и способа доставки. Бесплатная доставка при заказе от 3000 ₽ или от 150 BYN." },
+            { id: 7, category: "delivery", question: "Сколько времени занимает доставка?", answer: "Доставка по Минску: 1-2 дня. По Беларуси: 2-4 дня. По России: 5-10 дней." },
+            { id: 8, category: "delivery", question: "Как отследить посылку?", answer: "После отправки вы получите трек-номер на email и в Telegram. Отслеживать можно на сайте службы доставки (Почта России, СДЭК, Boxberry)." },
+            { id: 9, category: "delivery", question: "Доставляете ли за границу?", answer: "Да, мы доставляем в любую страну через СДЭК или Почту России. Стоимость рассчитывается индивидуально." },
+            
+            // Возврат и обмен
+            { id: 10, category: "return", question: "Можно ли вернуть товар?", answer: "Да, вы можете вернуть товар надлежащего качества в течение 14 дней с момента получения при сохранении товарного вида и упаковки." },
+            { id: 11, category: "return", question: "Как оформить возврат?", answer: "Для оформления возврата свяжитесь с нами через Telegram- @jsadmin2026, укажите номер заказа и причину возврата." },
+            { id: 12, category: "return", question: "Сколько времени занимает возврат денег?", answer: "Деньги возвращаются в течение 5-10 рабочих дней после получения и проверки товара." },
+            { id: 13, category: "return", question: "Можно ли обменять товар на другой размер/цвет?", answer: "Да, вы можете обменять товар на другой размер или цвет при наличии. Свяжитесь с нами для оформления обмена." },
+            
+            // Товары
+            { id: 14, category: "product", question: "Как выбрать размер?", answer: "На странице каждого товара есть таблица размеров. Если сомневаетесь — напишите нам в Telegram, мы поможем подобрать размер по вашим параметрам." },
+            { id: 15, category: "product", question: "Из каких материалов сделаны товары?", answer: "Мы используем натуральные и качественные материалы: хлопок, полиэстер, флис. Информация о составе указана на странице каждого товара." },
+            { id: 16, category: "product", question: "Как ухаживать за одеждой?", answer: "Рекомендуем стирать при температуре не выше 30°C, не отбеливать, не гладить на высоких температурах. Детальная информация на ярлыке товара." },
+            { id: 17, category: "product", question: "Что такое Jinada Style?", answer: "Jinada Style — это эксклюзивная линейка товаров с авторскими принтами и дизайном. Это одежда для тех, кто хочет выделиться." },
+            
+            // Другое
+            { id: 18, category: "other", question: "Как связаться с поддержкой?", answer: "Вы можете связаться с нами через Telegram @jsadmin2026, по email jinadashopver@gmail.com или по телефону +7 925 658-88-14." },
+            { id: 19, category: "other", question: "Есть ли у вас программа лояльности?", answer: "Да, за каждую покупку начисляются бонусные баллы. 1 балл = 1 ₽. Баллы можно использовать для оплаты следующих заказов." },
+            { id: 20, category: "other", question: "Можно ли купить оптом?", answer: "Да, по вопросам оптовых закупок обращайтесь в Telegram- @jsadmin2026. Индивидуальные условия для оптовиков." }
+        ];
+
+        let currentCategory = "all";
+        let currentSearch = "";
+
+        function renderFaq() {
+            const container = document.getElementById("faqContainer");
+            let filtered = faqData;
+            
+            // Фильтр по категории
+            if (currentCategory !== "all") {
+                filtered = filtered.filter(item => item.category === currentCategory);
+            }
+            
+            // Фильтр по поиску
+            if (currentSearch) {
+                const searchLower = currentSearch.toLowerCase();
+                filtered = filtered.filter(item => 
+                    item.question.toLowerCase().includes(searchLower) || 
+                    item.answer.toLowerCase().includes(searchLower)
+                );
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-results">❌ Ничего не найдено. Попробуйте изменить запрос.</div>';
+                return;
+            }
+            
+            // Группировка по категориям
+            const categories = {
+                order: { title: "📦 Заказ и оплата", icon: "📦" },
+                delivery: { title: "🚚 Доставка", icon: "🚚" },
+                return: { title: "🔄 Возврат и обмен", icon: "🔄" },
+                product: { title: "👕 Товары", icon: "👕" },
+                other: { title: "❓ Другое", icon: "❓" }
+            };
+            
+            let html = '';
+            
+            if (currentCategory === "all") {
+                // Группировка по категориям
+                for (const [catKey, catInfo] of Object.entries(categories)) {
+                    const catItems = filtered.filter(item => item.category === catKey);
+                    if (catItems.length > 0) {
+                        html += `<div class="faq-section"><div class="faq-section-title">${catInfo.icon} ${catInfo.title}</div>`;
+                        html += renderFaqItems(catItems);
+                        html += `</div>`;
+                    }
+                }
+            } else {
+                html += renderFaqItems(filtered);
+            }
+            
+            container.innerHTML = html;
+            
+            // Инициализация аккордеона
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    item.classList.toggle('open');
+                });
+            });
+        }
+        
+        function renderFaqItems(items) {
+            return items.map(item => `
+                <div class="faq-item" data-id="${item.id}">
+                    <div class="faq-question">
+                        <span>${escapeHtml(item.question)}</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        ${formatAnswer(item.answer)}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function formatAnswer(answer) {
+            // Преобразуем ссылки в кликабельные
+            let formatted = escapeHtml(answer);
+            formatted = formatted.replace(/@jsadmin2026/g, '<a href="https://t.me/jsadmin2026" target="_blank">@jsadmin2026</a>');
+            formatted = formatted.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+            return formatted;
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return "";
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function searchFaq() {
+            const input = document.getElementById("faqSearchInput");
+            currentSearch = input.value.trim();
+            renderFaq();
+        }
+        
+        function setupCategories() {
+            const btns = document.querySelectorAll('.faq-cat-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.cat;
+                    renderFaq();
+                });
+            });
+        }
+        
+        // Инициализация
+        setupCategories();
+        renderFaq();
+    </script>
+</body>
+</html>

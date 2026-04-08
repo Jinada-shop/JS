@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37' stroke='%23f5e7b2' stroke-width='1.5'/%3E%3Ctext x='50' y='88' text-anchor='middle' font-size='14' font-weight='bold' fill='%23d4af37' font-family='Arial'%3EJINADA%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB1klEQVR4nO2aMW7CQBBF30pRChSJghvwAzpKEW7ADSgSBSWi4QYUlLgBJSKlcEERpUhEFClyA/bfyBp5GY09Xo+dGYlK+6RRLNuz+3d27dhBEARBEARBEARBEARBEARBEARBEDeGpmmqqmpe13U9TdP0NU3TNM/zx7Is67Zt2+O+7/sYQkEQhP+XrusuP7zrug+O4zjjOI6TZVmWZVk2TdM0eZ7neZ7n+TRNU4wXQRD3wTRNl7Lrulme53me53m6ruu6rus6juOs67ouy7Ksy7KsYwjP87BtW+u6rtd1XWOMIYSgbdtgjBFCiDHGGGOMMcYYY4wxxhhjjCIIjuMEhBAAQAghhBBCCCGEEEIIIYQQQgghhBDGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4z/AITyC0IhCCEEhBDGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4z/JYRQ13Vd13Vd13Vd13Vd13Vd13Vd13Vd1z+NHzI94/S1kELIAAAAAElFTkSuQmCC">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Cpath d='M50 15 L58 35 L80 38 L64 52 L68 75 L50 62 L32 75 L36 52 L20 38 L42 35 Z' fill='%23d4af37' stroke='%23f5e7b2' stroke-width='1.5'/%3E%3Ctext x='50' y='88' text-anchor='middle' font-size='14' font-weight='bold' fill='%23d4af37' font-family='Arial'%3EJINADA%3C/text%3E%3C/svg%3E">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Добро пожаловать — JINADA</title>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Золотые искры на фоне */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 10% 20%, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 25% 45%, #f5e7b2, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40% 60%, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 55% 30%, #c9a062, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 70% 75%, #f5e7b2, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 85% 15%, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90% 50%, #e8c48a, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 15% 80%, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50% 95%, #f5e7b2, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 75% 10%, #c9a062, rgba(0,0,0,0));
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            animation: sparkleFloat 6s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes sparkleFloat {
+            0% { opacity: 0.3; transform: translateY(0px); }
+            50% { opacity: 0.7; transform: translateY(-10px); }
+            100% { opacity: 0.3; transform: translateY(0px); }
+        }
+
+        /* Золотое сияние по краям */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: goldPulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes goldPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem;
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 56px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.2), 0 0 30px rgba(212, 175, 55, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            animation: rotateGlow 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-card:hover {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .logo h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d4af37 0%, #f5e7b2 30%, #d4af37 50%, #f5e7b2 70%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+            letter-spacing: 2px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .logo p {
+            color: #d4af37;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .crown-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: crownFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes crownFloat {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(-5deg); }
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .welcome-text h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #f5e7b2, #d4af37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+        .welcome-text p {
+            color: #aaa;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 60px;
+            color: #e8e6e3;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .input-group input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            background: rgba(10, 10, 10, 0.95);
+        }
+        .input-group input::placeholder {
+            color: #666;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #d4af37, #b8941a);
+            color: #0a0a0a;
+            border: none;
+            padding: 1rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .login-btn:hover::before {
+            left: 100%;
+        }
+        .login-btn:hover {
+            background: linear-gradient(135deg, #f5e7b2, #d4af37);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+        }
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 35%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+        .divider::before {
+            left: 0;
+        }
+        .divider::after {
+            right: 0;
+        }
+        .divider span {
+            background: rgba(20,20,20,0.9);
+            padding: 0 1rem;
+            color: #d4af37;
+            font-size: 0.8rem;
+        }
+
+        .guest-btn {
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+        }
+        .guest-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .back-link a {
+            color: #888;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .back-link a:hover {
+            color: #d4af37;
+            transform: translateX(-5px);
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, rgba(204, 68, 68, 0.15), rgba(204, 68, 68, 0.05));
+            color: #ff8888;
+            padding: 0.8rem 1rem;
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, rgba(68, 204, 68, 0.15), rgba(68, 204, 68, 0.05));
+            color: #88ff88;
+            padding: 0.8rem 1rem;
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid rgba(68, 204, 68, 0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #d4af37;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            padding: 0.5rem;
+        }
+        .resend-btn:hover {
+            color: #f5e7b2;
+            text-shadow: 0 0 5px #d4af37;
+        }
+
+        /* Анимация для шага 2 */
+        .step-transition {
+            animation: fadeInStep 0.4s ease;
+        }
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Декоративные элементы */
+        .gold-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #d4af37 1px, transparent 1px);
+            background-size: 15px 15px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .gold-dots-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #d4af37 1px, transparent 1px);
+            background-size: 12px 12px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        @media (max-width: 550px) {
+            .login-card { padding: 1.8rem; }
+            .login-container { margin: 1rem; }
+            .logo h1 { font-size: 2.2rem; }
+            .welcome-text h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gold-dots"></div>
+    <div class="gold-dots-right"></div>
+    
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <div class="crown-icon">👑</div>
+                <h1>JINADA</h1>
+                <p>уличная одежда с душой</p>
+            </div>
+
+            <div class="welcome-text">
+                <h2 id="formTitle">✨ Добро пожаловать ✨</h2>
+                <p id="formDesc">Войдите в мир стиля Jinada</p>
+            </div>
+
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+
+            <!-- ШАГ 1: Имя и email -->
+            <div id="step1">
+                <div class="input-group">
+                    <input type="text" id="userName" placeholder="Ваше имя">
+                </div>
+                <div class="input-group">
+                    <input type="email" id="userEmail" placeholder="Email">
+                </div>
+                <button class="login-btn" onclick="sendCode()">
+                    📧 Продолжить
+                </button>
+            </div>
+
+            <!-- ШАГ 2: Ввод кода -->
+            <div id="step2" style="display:none;">
+                <div class="input-group">
+                    <input type="text" id="verificationCode" placeholder="Введите код из письма">
+                </div>
+                <button class="login-btn" onclick="verifyCode()">
+                    🔓 Войти в аккаунт
+                </button>
+                <button class="resend-btn" onclick="resendCode()">
+                    📧 Отправить код повторно
+                </button>
+                <button class="login-btn guest-btn" onclick="backToStep1()" style="margin-top: 0.5rem;">
+                    ← Назад
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>или</span>
+            </div>
+
+            <button class="login-btn guest-btn" onclick="continueAsGuest()">
+                👤 Продолжить без регистрации
+            </button>
+
+            <div class="back-link">
+                <a href="index.html">
+                    ← На главную
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== НАСТРОЙКИ EMAILJS ==========
+        const EMAILJS_PUBLIC_KEY = "623rpX4tGZcYaQvjU";
+        const EMAILJS_SERVICE_ID = "service_swlfkd7";
+        const EMAILJS_TEMPLATE_ID = "template_8609c8u";
+        // ======================================
+
+        let pendingVerification = null;
+        let currentEmail = "";
+        let currentName = "";
+
+        function showError(message) {
+            const errorDiv = document.getElementById("errorMessage");
+            errorDiv.textContent = message;
+            errorDiv.style.display = "block";
+            setTimeout(() => {
+                errorDiv.style.display = "none";
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById("successMessage");
+            successDiv.textContent = message;
+            successDiv.style.display = "block";
+            setTimeout(() => {
+                successDiv.style.display = "none";
+            }, 3000);
+        }
+
+        function generateCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function saveUserToDatabase(userId, userName, userEmail) {
+            let users = JSON.parse(localStorage.getItem("jinada_users") || "[]");
+            if (!users.find(u => u.email === userEmail)) {
+                users.push({
+                    id: userId,
+                    name: userName,
+                    email: userEmail,
+                    subscribeDate: new Date().toISOString(),
+                    verified: true
+                });
+                localStorage.setItem("jinada_users", JSON.stringify(users));
+                console.log("✅ Новый пользователь сохранён:", userEmail);
+                return true;
+            }
+            return false;
+        }
+
+        async function sendCodeToEmail(userEmail, userName, code) {
+            try {
+                await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    {
+                        to_email: userEmail,
+                        to_name: userName,
+                        verification_code: code,
+                        site_url: window.location.origin
+                    }
+                );
+                console.log("✅ Email отправлен:", userEmail);
+                return true;
+            } catch (error) {
+                console.error("❌ Ошибка:", error);
+                showError("Ошибка отправки письма. Проверьте email и попробуйте снова.");
+                return false;
+            }
+        }
+
+        async function sendCode() {
+            const name = document.getElementById("userName").value.trim();
+            const email = document.getElementById("userEmail").value.trim();
+
+            if (!name) { showError("Введите ваше имя"); return; }
+            if (!email) { showError("Введите email"); return; }
+            if (!email.includes("@")) { showError("Введите корректный email"); return; }
+
+            currentName = name;
+            currentEmail = email;
+            
+            const code = generateCode();
+            pendingVerification = { name, email, code, timestamp: Date.now() };
+
+            showSuccess("⏳ Отправка кода на ваш email...");
+            
+            const sent = await sendCodeToEmail(email, name, code);
+            
+            if (sent) {
+                showSuccess(`✨ Код подтверждения отправлен на ${email} ✨`);
+                
+                // Анимация перехода
+                const step1 = document.getElementById("step1");
+                const step2 = document.getElementById("step2");
+                step1.style.display = "none";
+                step2.style.display = "block";
+                step2.classList.add("step-transition");
+                
+                document.getElementById("formTitle").innerHTML = "🔐 Подтверждение";
+                document.getElementById("formDesc").innerHTML = `Введите 6-значный код из письма<br>отправленного на <strong style="color:#d4af37">${email}</strong>`;
+            }
+        }
+
+        async function resendCode() {
+            if (!currentEmail) { backToStep1(); return; }
+            const code = generateCode();
+            pendingVerification = { name: currentName, email: currentEmail, code, timestamp: Date.now() };
+            showSuccess("⏳ Отправка нового кода...");
+            const sent = await sendCodeToEmail(currentEmail, currentName, code);
+            if (sent) showSuccess(`✨ Новый код отправлен на ${currentEmail} ✨`);
+        }
+
+        function verifyCode() {
+            const enteredCode = document.getElementById("verificationCode").value.trim();
+            
+            if (!enteredCode) { showError("Введите код подтверждения"); return; }
+            if (!pendingVerification) { showError("Сессия истекла, попробуйте снова"); backToStep1(); return; }
+            if (Date.now() - pendingVerification.timestamp > 600000) { showError("Код истек, запросите новый"); backToStep1(); return; }
+            if (enteredCode !== pendingVerification.code) { showError("Неверный код, попробуйте еще раз"); return; }
+            
+            const userId = "user_" + Date.now();
+            const user = { 
+                id: userId, 
+                name: pendingVerification.name, 
+                email: pendingVerification.email, 
+                picture: null, 
+                loginTime: new Date().toISOString(),
+                subscribeDate: new Date().toISOString()
+            };
+            
+            localStorage.setItem("jinada_user", JSON.stringify(user));
+            saveUserToDatabase(userId, pendingVerification.name, pendingVerification.email);
+            
+            showSuccess("✅ Добро пожаловать в Jinada! Перенаправление...");
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
+        }
+
+        function backToStep1() {
+            pendingVerification = null;
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+            step2.style.display = "none";
+            step1.style.display = "block";
+            document.getElementById("formTitle").innerHTML = "✨ Добро пожаловать ✨";
+            document.getElementById("formDesc").innerHTML = "Войдите в мир стиля Jinada";
+            document.getElementById("verificationCode").value = "";
+        }
+
+        function continueAsGuest() {
+            localStorage.removeItem("jinada_user");
+            window.location.href = "index.html";
+        }
+
+        // Инициализация EmailJS
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            console.log("✅ EmailJS инициализирован");
+        } else {
+            console.error("❌ EmailJS не загружен!");
+        }
+    </script>
+</body>
+</html>
