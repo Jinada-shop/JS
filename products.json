@@ -1,0 +1,75 @@
+0
+: 
+{id: 1, code: 'JIN-001', name: 'Весенний костюм', price: 872, category: 'women', …}
+1
+: 
+{id: 2, code: 'JIN-002', name: 'Костюм с длинными рукавами и воротником', price: 970, category: 'women', …}
+2
+: 
+{id: 3, code: 'JIN-003', name: 'Брючный костюм', price: 825, category: 'women', …}
+3
+: 
+{id: 4, code: 'JIN-004', name: 'Амазонский темпераментный однотонный костюм-шорты', price: 770, category: 'women', …}
+4
+: 
+{id: 5, code: 'JIN-005', name: 'Женская повседневная однотонная блузка с асимметричным подолом', price: 890, category: 'women', …}
+5
+: 
+{id: 6, code: 'JIN-006', name: 'Летний комплект из двух предметов из смешанного женского белья independent station', price: 1129, category: 'women', …}
+6
+: 
+{id: 7, code: 'JIN-007', name: 'Осенние новые женские брюки', price: 617, category: 'women', …}
+7
+: 
+{id: 8, code: 'JIN-008', name: 'Летний женский костюм', price: 1065, category: 'women', …}
+8
+: 
+{id: 9, code: 'JIN-009', name: 'Женская футболка Amazon', price: 774, category: 'women', …}
+9
+: 
+{id: 10, code: 'JIN-010', name: 'Повседневные универсальные брюки с драпировкой', price: 680, category: 'women', …}
+10
+: 
+{id: 11, code: 'JIN-011', name: 'Темпераментный костюм платье женское', price: 953, category: 'women', …}
+11
+: 
+{id: 12, code: 'JIN-012', name: 'Однотонный льняной комбинезон', price: 1271, category: 'women', …}
+12
+: 
+{id: 13, code: 'JIN-013', name: 'Повседневный костюм', price: 824, category: 'women', …}
+13
+: 
+{id: 14, code: 'JIN-014', name: 'Женское платье на одно плечо', price: 1235, category: 'women', …}
+14
+: 
+{id: 15, code: 'JIN-015', name: 'Женский-повседневный костюм', price: 1145, category: 'women', …}
+15
+: 
+{id: 16, code: 'JIN-016', name: 'Повседневный спортивный костюм', price: 1000, category: 'women', …}
+16
+: 
+{id: 17, code: 'JIN-017', name: 'Женский-повседневный костюм', price: 892, category: 'women', …}
+17
+: 
+{id: 18, code: 'JIN-018', name: 'Повседневная свободная льняная рубашка', price: 744, category: 'women', …}
+18
+: 
+{id: 19, code: 'JIN-019', name: 'Летнее платье со звездным небом', price: 760, category: 'women', …}
+19
+: 
+{id: 20, code: 'JIN-020', name: 'Повседневный костюм', price: 809, category: 'women', …}
+20
+: 
+{id: 21, code: 'JIN-021', name: 'Мужская толстовка большого размера', price: 1129, category: 'men', …}
+21
+: 
+{id: 22, code: 'JIN-022', name: 'Мужская Толстовка В Японском Стиле ', price: 1400, category: 'men', …}
+22
+: 
+{id: 23, code: 'JIN-023', name: 'Мужские Осенне-зимние Утолщенные Толстовки Большого Размера ', price: 1200, category: 'men', …}
+23
+: 
+{id: 24, code: 'JIN-024', name: 'Мужская толстовка Harajuku ', price: 970, category: 'men', …}
+length
+: 
+24
