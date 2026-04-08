@@ -1,75 +1,323 @@
-0
-: 
-{id: 1, code: 'JIN-001', name: 'Весенний костюм', price: 872, category: 'women', …}
-1
-: 
-{id: 2, code: 'JIN-002', name: 'Костюм с длинными рукавами и воротником', price: 970, category: 'women', …}
-2
-: 
-{id: 3, code: 'JIN-003', name: 'Брючный костюм', price: 825, category: 'women', …}
-3
-: 
-{id: 4, code: 'JIN-004', name: 'Амазонский темпераментный однотонный костюм-шорты', price: 770, category: 'women', …}
-4
-: 
-{id: 5, code: 'JIN-005', name: 'Женская повседневная однотонная блузка с асимметричным подолом', price: 890, category: 'women', …}
-5
-: 
-{id: 6, code: 'JIN-006', name: 'Летний комплект из двух предметов из смешанного женского белья independent station', price: 1129, category: 'women', …}
-6
-: 
-{id: 7, code: 'JIN-007', name: 'Осенние новые женские брюки', price: 617, category: 'women', …}
-7
-: 
-{id: 8, code: 'JIN-008', name: 'Летний женский костюм', price: 1065, category: 'women', …}
-8
-: 
-{id: 9, code: 'JIN-009', name: 'Женская футболка Amazon', price: 774, category: 'women', …}
-9
-: 
-{id: 10, code: 'JIN-010', name: 'Повседневные универсальные брюки с драпировкой', price: 680, category: 'women', …}
-10
-: 
-{id: 11, code: 'JIN-011', name: 'Темпераментный костюм платье женское', price: 953, category: 'women', …}
-11
-: 
-{id: 12, code: 'JIN-012', name: 'Однотонный льняной комбинезон', price: 1271, category: 'women', …}
-12
-: 
-{id: 13, code: 'JIN-013', name: 'Повседневный костюм', price: 824, category: 'women', …}
-13
-: 
-{id: 14, code: 'JIN-014', name: 'Женское платье на одно плечо', price: 1235, category: 'women', …}
-14
-: 
-{id: 15, code: 'JIN-015', name: 'Женский-повседневный костюм', price: 1145, category: 'women', …}
-15
-: 
-{id: 16, code: 'JIN-016', name: 'Повседневный спортивный костюм', price: 1000, category: 'women', …}
-16
-: 
-{id: 17, code: 'JIN-017', name: 'Женский-повседневный костюм', price: 892, category: 'women', …}
-17
-: 
-{id: 18, code: 'JIN-018', name: 'Повседневная свободная льняная рубашка', price: 744, category: 'women', …}
-18
-: 
-{id: 19, code: 'JIN-019', name: 'Летнее платье со звездным небом', price: 760, category: 'women', …}
-19
-: 
-{id: 20, code: 'JIN-020', name: 'Повседневный костюм', price: 809, category: 'women', …}
-20
-: 
-{id: 21, code: 'JIN-021', name: 'Мужская толстовка большого размера', price: 1129, category: 'men', …}
-21
-: 
-{id: 22, code: 'JIN-022', name: 'Мужская Толстовка В Японском Стиле ', price: 1400, category: 'men', …}
-22
-: 
-{id: 23, code: 'JIN-023', name: 'Мужские Осенне-зимние Утолщенные Толстовки Большого Размера ', price: 1200, category: 'men', …}
-23
-: 
-{id: 24, code: 'JIN-024', name: 'Мужская толстовка Harajuku ', price: 970, category: 'men', …}
-length
-: 
-24
+{
+  "products": [
+    {
+      "id": 1,
+      "code": "JIN-001",
+      "name": "Весенний костюм",
+      "price": 872,
+      "category": "women",
+      "jinada": false,
+      "discount": 5,
+      "desc": "Спотовый трансграничный внешнеторговый новый женский повседневный пуловер с V-образным вырезом и длинными рукавами, длинные брюки.",
+      "stock": 15,
+      "colors": [
+        {"name": "Шоколадный", "code": "#7B3F00", "img": "images/women/1-5.jpg", "gallery": ["images/women/1-1.jpg","images/women/1-2.jpg","images/women/1-3.jpg","images/women/1-4.jpg"]},
+        {"name": "Бежевый", "code": "#FFE4E1", "img": "images/women/1-1.jpg", "gallery": ["images/women/1-5.jpg","images/women/1-2.jpg","images/women/1-3.jpg","images/women/1-4.jpg"]},
+        {"name": "Синий", "code": "#0000FF", "img": "images/women/1-4.jpg", "gallery": ["images/women/1-5.jpg","images/women/1-2.jpg","images/women/1-3.jpg","images/women/1-1.jpg"]},
+        {"name": "Зеленый", "code": "#008000", "img": "images/women/1-3.jpg", "gallery": ["images/women/1-5.jpg","images/women/1-2.jpg","images/women/1-3.jpg","images/women/1-4.jpg"]},
+        {"name": "Белый", "code": "#FFFFFF", "img": "images/women/1-2.jpg", "gallery": ["images/women/1-2.jpg","images/women/1-3.jpg","images/women/1-4.jpg","images/women/1-5.jpg"]}
+      ],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 2,
+      "code": "JIN-002",
+      "name": "Костюм с длинными рукавами и воротником",
+      "price": 970,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Элегантный костюм с длинными рукавами и воротником",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/2-1.jpg", "gallery": ["images/women/2-1.jpg","images/women/2-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 3,
+      "code": "JIN-003",
+      "name": "Брючный костюм",
+      "price": 825,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Классический брючный костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/3-1.jpg", "gallery": ["images/women/3-1.jpg","images/women/3-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 4,
+      "code": "JIN-004",
+      "name": "Амазонский темпераментный однотонный костюм-шорты",
+      "price": 770,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Летний костюм-шорты",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/4-1.jpg", "gallery": ["images/women/4-1.jpg","images/women/4-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 5,
+      "code": "JIN-005",
+      "name": "Женская повседневная однотонная блузка с асимметричным подолом",
+      "price": 890,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Стильная блузка с асимметричным подолом",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/5-1.jpg", "gallery": ["images/women/5-1.jpg","images/women/5-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 6,
+      "code": "JIN-006",
+      "name": "Летний комплект из двух предметов из смешанного женского белья independent station",
+      "price": 1129,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Летний комплект из двух предметов",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/6-1.jpg", "gallery": ["images/women/6-1.jpg","images/women/6-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 7,
+      "code": "JIN-007",
+      "name": "Осенние новые женские брюки",
+      "price": 617,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Осенние женские брюки",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/7-1.jpg", "gallery": ["images/women/7-1.jpg","images/women/7-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 8,
+      "code": "JIN-008",
+      "name": "Летний женский костюм",
+      "price": 1065,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Летний женский костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/8-1.jpg", "gallery": ["images/women/8-1.jpg","images/women/8-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 9,
+      "code": "JIN-009",
+      "name": "Женская футболка Amazon",
+      "price": 774,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Женская футболка",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/9-1.jpg", "gallery": ["images/women/9-1.jpg","images/women/9-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 10,
+      "code": "JIN-010",
+      "name": "Повседневные универсальные брюки с драпировкой",
+      "price": 680,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Брюки с драпировкой",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/10-1.jpg", "gallery": ["images/women/10-1.jpg","images/women/10-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 11,
+      "code": "JIN-011",
+      "name": "Темпераментный костюм платье женское",
+      "price": 953,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Костюм-платье",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/11-1.jpg", "gallery": ["images/women/11-1.jpg","images/women/11-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 12,
+      "code": "JIN-012",
+      "name": "Однотонный льняной комбинезон",
+      "price": 1271,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Льняной комбинезон",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/12-1.jpg", "gallery": ["images/women/12-1.jpg","images/women/12-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 13,
+      "code": "JIN-013",
+      "name": "Повседневный костюм",
+      "price": 824,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Повседневный костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/13-1.jpg", "gallery": ["images/women/13-1.jpg","images/women/13-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 14,
+      "code": "JIN-014",
+      "name": "Женское платье на одно плечо",
+      "price": 1235,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Платье на одно плечо",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/14-1.jpg", "gallery": ["images/women/14-1.jpg","images/women/14-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 15,
+      "code": "JIN-015",
+      "name": "Женский-повседневный костюм",
+      "price": 1145,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Повседневный костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/15-1.jpg", "gallery": ["images/women/15-1.jpg","images/women/15-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 16,
+      "code": "JIN-016",
+      "name": "Повседневный спортивный костюм",
+      "price": 1000,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Спортивный костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/16-1.jpg", "gallery": ["images/women/16-1.jpg","images/women/16-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 17,
+      "code": "JIN-017",
+      "name": "Женский-повседневный костюм",
+      "price": 892,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Повседневный костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/17-1.jpg", "gallery": ["images/women/17-1.jpg","images/women/17-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 18,
+      "code": "JIN-018",
+      "name": "Повседневная свободная льняная рубашка",
+      "price": 744,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Льняная рубашка свободного кроя",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/18-1.jpg", "gallery": ["images/women/18-1.jpg","images/women/18-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 19,
+      "code": "JIN-019",
+      "name": "Летнее платье со звездным небом",
+      "price": 760,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Летнее платье с принтом звездное небо",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/19-1.jpg", "gallery": ["images/women/19-1.jpg","images/women/19-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 20,
+      "code": "JIN-020",
+      "name": "Повседневный костюм",
+      "price": 809,
+      "category": "women",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Повседневный костюм",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/women/20-1.jpg", "gallery": ["images/women/20-1.jpg","images/women/20-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 21,
+      "code": "JIN-021",
+      "name": "Мужская толстовка большого размера",
+      "price": 1129,
+      "category": "men",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Мужская толстовка большого размера",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/men/21-1.jpg", "gallery": ["images/men/21-1.jpg","images/men/21-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 22,
+      "code": "JIN-022",
+      "name": "Мужская Толстовка В Японском Стиле",
+      "price": 1400,
+      "category": "men",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Мужская толстовка в японском стиле",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/men/22-1.jpg", "gallery": ["images/men/22-1.jpg","images/men/22-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 23,
+      "code": "JIN-023",
+      "name": "Мужские Осенне-зимние Утолщенные Толстовки Большого Размера",
+      "price": 1200,
+      "category": "men",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Утепленная мужская толстовка",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/men/23-1.jpg", "gallery": ["images/men/23-1.jpg","images/men/23-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    },
+    {
+      "id": 24,
+      "code": "JIN-024",
+      "name": "Мужская толстовка Harajuku",
+      "price": 970,
+      "category": "men",
+      "jinada": false,
+      "discount": 0,
+      "desc": "Мужская толстовка в стиле Harajuku",
+      "stock": 10,
+      "colors": [{"name": "Стандарт", "code": "#808080", "img": "images/men/24-1.jpg", "gallery": ["images/men/24-1.jpg","images/men/24-2.jpg"]}],
+      "sizes": ["S","M","L","XL"]
+    }
+  ],
+  "lastUpdated": "2025-01-01T00:00:00Z"
+}
