@@ -3,7 +3,7 @@ const userStates = {};
 
 exports.handler = async (event) => {
   const BOT_TOKEN = "8602701116:AAG2v1a9olDgOw_ytmBTL0SMdELPHADE1Go";
-  const GITHUB_TOKEN = "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";
+  const GITHUB_TOKEN = "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";
   const REPO_OWNER = "jinada-shop";
   const REPO_NAME = "JS";
   const PRODUCTS_FILE_PATH = "products.json";
